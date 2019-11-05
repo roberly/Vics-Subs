@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="199.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.RequestOffController">
+<AnchorPane prefHeight="199.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.RequestOffController">
    <children>
       <DatePicker layoutX="203.0" layoutY="70.0" prefHeight="30.0" prefWidth="194.0" AnchorPane.bottomAnchor="99.0" />
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="220.0" layoutY="14.0" prefHeight="30.0" prefWidth="161.0" text="Request Days off" AnchorPane.rightAnchor="219.0">
