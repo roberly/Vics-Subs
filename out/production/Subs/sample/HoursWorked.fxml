@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="247.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.HoursWorkedController">
+    <children>
+        <TableView layoutX="14.0" layoutY="14.0" prefHeight="260.0" prefWidth="600.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+            <columns>
+                <TableColumn prefWidth="78.0" text="Sunday" />
+                <TableColumn prefWidth="85.0" text="Monday" />
+                <TableColumn prefWidth="83.0" text="Tuesday" />
+                <TableColumn prefWidth="90.0" text="Wednesday" />
+                <TableColumn prefWidth="89.0" text="Thursday" />
+                <TableColumn prefWidth="90.0" text="Friday" />
+                <TableColumn prefWidth="84.0" text="Saturday" />
+            </columns>
+        </TableView>
+        <Label layoutX="233.0" layoutY="14.0" prefHeight="30.0" prefWidth="135.0" text="Week of" AnchorPane.leftAnchor="233.0" />
+      <Label layoutX="216.0" layoutY="203.0" prefHeight="30.0" prefWidth="191.0" text="Total Hours Worked This Week" />
+    </children>
+</AnchorPane>
