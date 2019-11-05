@@ -16,6 +16,6 @@
                 <Font size="14.0" />
             </font>
         </Label>
-        <Button layoutX="133.0" layoutY="159.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="36.0" text="Ok" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="132.0" AnchorPane.rightAnchor="132.0" />
+        <Button fx:id="okButton" layoutX="133.0" layoutY="159.0" mnemonicParsing="false" onAction="#handleCloseButtonAction" prefHeight="30.0" prefWidth="36.0" text="Ok" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="132.0" AnchorPane.rightAnchor="132.0" />
     </children>
 </AnchorPane>
