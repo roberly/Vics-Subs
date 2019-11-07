@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.WelcomeController">
    <children>
-      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="65.0" text="Logout" />
+      <Button fx:id="logoutButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleCloseButtonAction" prefHeight="30.0" prefWidth="65.0" text="Logout" />
       <Label alignment="CENTER" layoutX="225.0" layoutY="44.0" prefHeight="50.0" prefWidth="150.0" text="Welcome to Vic's">
          <font>
             <Font size="18.0" />

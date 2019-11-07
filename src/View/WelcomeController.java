@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 public class WelcomeController {
@@ -72,6 +73,15 @@ public class WelcomeController {
         stage.setTitle("Request Off");
         stage.setScene(new Scene(root1));
         stage.show();
+    }
+
+    @FXML
+    Button logoutButton;
+
+    @FXML
+    public void handleCloseButtonAction() {
+        Stage stage = (Stage) logoutButton.getScene().getWindow();
+        stage.close();
     }
 
 
