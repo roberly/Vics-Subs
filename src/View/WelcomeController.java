@@ -1,14 +1,39 @@
 package View;
 
+import Database.DBConnection;
+import Main.Employee;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class WelcomeController {
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
+public class WelcomeController
+{
+    @FXML
+    private Label welcomeField;
+
+    private DBConnection database = new DBConnection();
+    private Connection connection;
+    private Statement statement;
+    private ResultSet resultSet;
+    private Employee employee;
+
+    public void getEmployeeData(Employee e)
+    {
+        employee = e;
+        welcomeField.setText("Welcome to Vic's, " + employee.getFirstName() + " " + employee.getLastName());
+    }
 
     /**
      * Clock in
