@@ -1,6 +1,7 @@
 package View;
 
 import Database.DBConnection;
+import Main.Employee;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -27,6 +28,8 @@ public class LoginController
     @FXML
     private PasswordField pfpassword;
 
+    private Employee employee;
+
     @FXML
     public void loginButtonClicked() throws IOException
     {
@@ -40,6 +43,8 @@ public class LoginController
                 {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Welcome.fxml"));
                     Parent root1 = (Parent) fxmlLoader.load();
+                    WelcomeController controller = fxmlLoader.getController();
+                    controller.getEmployeeData(employee);
                     Stage stage = new Stage();
                     stage.setTitle("Welcome To Vics!");
                     stage.setScene(new Scene(root1));
@@ -66,8 +71,13 @@ public class LoginController
 
         while (resultSet.next())
         {
-            if(resultSet.getString("username")!=null && resultSet.getString("password")!=null){
+            if(resultSet.getString("username")!=null && resultSet.getString("password")!=null)
+            {
                 userPassOk = true;
+                employee = new Employee(
+                        resultSet.getString("Employee_ID"),
+                        resultSet.getString("firstName"),
+                        resultSet.getString("lastName"));
             }
         }
 

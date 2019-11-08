@@ -13,63 +13,47 @@ import javafx.beans.property.StringProperty;
 
 public class Employee
 {
-    private final IntegerProperty id;
-    private final StringProperty firstName;
-    private final StringProperty lastName;
+    private int id;
+    private String firstName;
+    private String lastName;
 
     /**
      * Default constructor.
      */
     public Employee()
     {
-        this(null, null, "0");
+        this("0", null, null);
     }
 
-    public Employee(String firstName, String lastName, String id)
+    public Employee(String id, String firstName, String lastName)
     {
-        this.id = new SimpleIntegerProperty(Integer.valueOf(id));
-        this.firstName = new SimpleStringProperty(firstName);
-        this.lastName = new SimpleStringProperty(lastName);
-    }
-
-    public IntegerProperty IdProperty()
-    {
-        return id;
+        this.id = (Integer.valueOf(id));
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public int getId()
     {
-        return id.get();
+        return id;
     }
 
     public String getFirstName()
     {
-        return firstName.get();
+        return firstName;
     }
 
     public void setFirstName(String firstName)
     {
-        this.firstName.set(firstName);
+        this.firstName = firstName;
     }
-
-    public StringProperty firstNameProperty()
-    {
-        return firstName;
-    }
-
     public String getLastName()
     {
-        return lastName.get();
+        return lastName;
     }
 
     public void setLastName(String lastName)
     {
-        this.lastName.set(lastName);
-    }
-
-    public StringProperty lastNameProperty()
-    {
-        return lastName;
+        this.lastName = lastName;
     }
 
 }
