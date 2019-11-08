@@ -24,7 +24,7 @@ public class ClockInController
 
     private int employeeID;
 
-    public void initialize()
+    public void initialize() throws SQLException
     {
         timeLabel.setText(getCurrentTime());
         logClockIn();
@@ -36,15 +36,30 @@ public class ClockInController
     Label timeLabel;
 
     @FXML
-    public void handleCloseButtonAction() {
+    public void handleCloseButtonAction()
+    {
         Stage stage = (Stage) okButton.getScene().getWindow();
         stage.close();
     }
 
     @FXML
-    public void logClockIn()
+    public void logClockIn() throws SQLException
     {
         System.out.println(getCurrentDate() + " " + getCurrentTime());
+        DBConnection database = new DBConnection();
+        Connection connection = database.getConnection();
+        Statement statement = connection.createStatement();
+
+        String currentTime = getCurrentTime();
+        String currentDate = getCurrentDate();
+
+        String strDateFormat = "hh:mm:ss";
+        DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
+        currentTime= dateFormat.format(currentTime);
+
+        String str = "INSERT INTO TimePunches VALUES (" + employeeID + ", CONVERT('" + currentTime + "', TIME), " +
+                "NULL, STR_TO_DATE('" + currentDate + "', %d/%m/%Y))";
+        statement.executeUpdate(str);
     }
 
     public void setEmployeeID(int id)
@@ -64,7 +79,7 @@ public class ClockInController
     public static String getCurrentDate()
     {
         Date date = new Date();
-        String strDateFormat = "MM-dd-yyyy";
+        String strDateFormat = "dd/MM/yyyy";
         DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
         String formattedDate= dateFormat.format(date);
         return formattedDate;
