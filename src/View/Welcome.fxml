@@ -29,10 +29,10 @@
         </rowConstraints>
          <children>
             <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#bringUpClockInGui" prefHeight="30.0" prefWidth="130.0" text="Clock in" />
-            <Button mnemonicParsing="false" onAction="#bringUpClockOutGui" prefHeight="30.0" prefWidth="130.0" text="Clock out" GridPane.rowIndex="1" />
-            <Button layoutX="10.0" layoutY="76.0" mnemonicParsing="false" onAction="#bringUpScheduleGui" prefHeight="30.0" prefWidth="130.0" text="Schedule" GridPane.rowIndex="2" />
-            <Button layoutX="10.0" layoutY="130.0" mnemonicParsing="false" onAction="#bringUpHoursWorkedGui" prefHeight="30.0" prefWidth="130.0" text="Hours Worked" GridPane.rowIndex="3" />
-            <Button layoutX="10.0" layoutY="184.0" mnemonicParsing="false" onAction="#bringUpRequestOffGui" prefHeight="30.0" prefWidth="130.0" text="Request Off" GridPane.rowIndex="4" />
+            <Button alignment="CENTER" mnemonicParsing="false" onAction="#bringUpClockOutGui" prefHeight="30.0" prefWidth="130.0" text="Clock out" GridPane.rowIndex="1" />
+            <Button alignment="CENTER" layoutX="10.0" layoutY="76.0" mnemonicParsing="false" onAction="#bringUpScheduleGui" prefHeight="30.0" prefWidth="130.0" text="Schedule" GridPane.rowIndex="2" />
+            <Button alignment="CENTER" layoutX="10.0" layoutY="130.0" mnemonicParsing="false" onAction="#bringUpHoursWorkedGui" prefHeight="30.0" prefWidth="130.0" text="Hours Worked" GridPane.rowIndex="3" />
+            <Button alignment="CENTER" layoutX="10.0" layoutY="184.0" mnemonicParsing="false" onAction="#bringUpRequestOffGui" prefHeight="30.0" prefWidth="130.0" text="Request Off" GridPane.rowIndex="4" />
          </children>
       </GridPane>
    </children>
