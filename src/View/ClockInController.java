@@ -12,49 +12,26 @@ import javafx.stage.Stage;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public class ClockInController
 {
-
-    public void initialize(){
-        timeLabel.setText(getCurrentTimeUsingCalendar());
-    }
 
     private DBConnection database = new DBConnection();
     private Connection connection;
     private Statement statement;
     private ResultSet resultSet;
 
-    private ObservableList<Employee> getDataFromEmployeeAndAddToObservableList(){
-        ObservableList<Employee> EmployeeData = FXCollections.observableArrayList();
-        try {
+    private int employeeID;
 
-            connection = (Connection) database.getConnection();
-            statement = (Statement) connection.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM Employee");
-            while(resultSet.next()){
-                EmployeeData.add(new Employee(
-                        resultSet.getString("Employee_ID"),
-                        resultSet.getString("firstName"),
-                        resultSet.getString("lastName")
-                ));
-            }
-            connection.close();
-            statement.close();
-            resultSet.close();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        return EmployeeData;
+    public void initialize()
+    {
+        timeLabel.setText(getCurrentTime());
+        logClockIn();
     }
 
     @FXML
     Button okButton;
-
     @FXML
     Label timeLabel;
 
@@ -67,15 +44,29 @@ public class ClockInController
     @FXML
     public void logClockIn()
     {
-
+        System.out.println(getCurrentDate() + " " + getCurrentTime());
     }
 
+    public void setEmployeeID(int id)
+    {
+        employeeID = id;
+    }
 
-    public static String getCurrentTimeUsingCalendar() {
-        Calendar cal = Calendar.getInstance();
-        Date date = cal.getTime();
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-        String formattedDate=dateFormat.format(date);
+    public static String getCurrentTime()
+    {
+        Date date = new Date();
+        String strDateFormat = "hh:mm:ss a";
+        DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
+        String formattedDate= dateFormat.format(date);
+        return formattedDate;
+    }
+
+    public static String getCurrentDate()
+    {
+        Date date = new Date();
+        String strDateFormat = "MM-dd-yyyy";
+        DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
+        String formattedDate= dateFormat.format(date);
         return formattedDate;
     }
 }
