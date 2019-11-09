@@ -53,12 +53,8 @@ public class ClockInController
         String currentTime = getCurrentTime();
         String currentDate = getCurrentDate();
 
-        String strDateFormat = "hh:mm:ss";
-        DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
-        currentTime= dateFormat.format(currentTime);
-
-        String str = "INSERT INTO TimePunches VALUES (" + employeeID + ", CONVERT('" + currentTime + "', TIME), " +
-                "NULL, STR_TO_DATE('" + currentDate + "', %d/%m/%Y))";
+        String str = "INSERT INTO TimePunches VALUES (" + employeeID + ", '" + currentTime + "', " +
+                "NULL, '" + currentDate + "')";
         statement.executeUpdate(str);
     }
 
@@ -79,7 +75,7 @@ public class ClockInController
     public static String getCurrentDate()
     {
         Date date = new Date();
-        String strDateFormat = "dd/MM/yyyy";
+        String strDateFormat = "MM/dd/yyyy";
         DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
         String formattedDate= dateFormat.format(date);
         return formattedDate;

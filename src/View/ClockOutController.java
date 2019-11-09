@@ -18,7 +18,6 @@ public class ClockOutController {
 
     @FXML
     Button okButton;
-
     @FXML
     Label timeLabel;
 
