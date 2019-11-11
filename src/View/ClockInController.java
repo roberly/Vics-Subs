@@ -24,16 +24,12 @@ public class ClockInController
 
     private int employeeID;
 
-    public void initialize() throws SQLException
-    {
-        timeLabel.setText(getCurrentTime());
-        logClockIn();
-    }
-
     @FXML
     Button okButton;
     @FXML
     Label timeLabel;
+    @FXML
+    Label successText;
 
     @FXML
     public void handleCloseButtonAction()
@@ -45,22 +41,33 @@ public class ClockInController
     @FXML
     public void logClockIn() throws SQLException
     {
-        System.out.println(getCurrentDate() + " " + getCurrentTime());
-        DBConnection database = new DBConnection();
-        Connection connection = database.getConnection();
-        Statement statement = connection.createStatement();
+        if(isNotClockedIn())
+        {
+            System.out.println(getCurrentDate() + " " + getCurrentTime());
+            DBConnection database = new DBConnection();
+            Connection connection = database.getConnection();
+            Statement statement = connection.createStatement();
 
-        String currentTime = getCurrentTime();
-        String currentDate = getCurrentDate();
+            String currentTime = getCurrentTime();
+            String currentDate = getCurrentDate();
 
-        String str = "INSERT INTO TimePunches VALUES (" + employeeID + ", '" + currentTime + "', " +
-                "NULL, '" + currentDate + "')";
-        statement.executeUpdate(str);
+            String str = "INSERT INTO TimePunches VALUES (" + employeeID + ", '" + currentTime + "', " +
+                    "NULL, '" + currentDate + "')";
+            statement.executeUpdate(str);
+            timeLabel.setText(currentTime);
+        }
+        else
+        {
+            //successText.setText("You have already clocked in today. See a manager if this is an error.");
+            successText.setText("Clock In Forbidden");
+            timeLabel.setText("User Already Clocked In");
+        }
     }
 
-    public void setEmployeeID(int id)
+    public void onInit(int id) throws SQLException
     {
         employeeID = id;
+        logClockIn();
     }
 
     public static String getCurrentTime()
@@ -79,5 +86,24 @@ public class ClockInController
         DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
         String formattedDate= dateFormat.format(date);
         return formattedDate;
+    }
+
+    public boolean isNotClockedIn() throws SQLException
+    {
+        boolean clockedIn = false;
+        String currentDate = getCurrentDate();
+        DBConnection database = new DBConnection();
+        Connection connection = database.getConnection();
+        Statement statement = connection.createStatement();
+
+        String str = "SELECT * FROM TimePunches WHERE Employee_ID = '" + employeeID + "' AND CurrentDate = '"+currentDate+"';";
+        System.out.println(str);
+        ResultSet resultSet = statement.executeQuery(str);
+
+        if(resultSet.first() == false)
+        {
+            clockedIn = true;
+        }
+        return clockedIn;
     }
 }
