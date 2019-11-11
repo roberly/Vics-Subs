@@ -57,6 +57,8 @@ public class WelcomeController
     public void bringUpClockOutGui() throws Exception{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ClockOut.fxml"));
         Parent root1 = (Parent) fxmlLoader.load();
+        ClockOutController controller = fxmlLoader.getController();
+        controller.setEmployeeID(employee.getId());
         Stage stage = new Stage();
         stage.setTitle("Clock Out");
         stage.setScene(new Scene(root1));
