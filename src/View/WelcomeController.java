@@ -42,6 +42,8 @@ public class WelcomeController
     public void bringUpClockInGui() throws Exception{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ClockIn.fxml"));
         Parent root1 = (Parent) fxmlLoader.load();
+        ClockInController controller = fxmlLoader.getController();
+        controller.setEmployeeID(employee.getId());
         Stage stage = new Stage();
         stage.setTitle("Clock In");
         stage.setScene(new Scene(root1));
