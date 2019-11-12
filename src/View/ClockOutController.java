@@ -58,7 +58,7 @@ public class ClockOutController {
         Connection connection = database.getConnection();
         Statement statement = connection.createStatement();
 
-        if(isNotClockedIn())
+        if(!isNotClockedIn())
         {
             successText.setText("Your clock out request has failed because ");
             timeLabel.setText("You have not clocked in today");
@@ -66,12 +66,13 @@ public class ClockOutController {
         else if(isClockedOut())
         {
             successText.setText("Your clock out request has failed because ");
-            timeLabel.setText("You have already clocked out for the day");
+            timeLabel.setText("You have already clocked out \n for the day");
         }
         else
         {
             String str = "update TimePunches set ClockOutTime = '" + time + "' where Employee_ID =" + employeeID + " and CurrentDate = '" + date + "'";
             statement.executeUpdate(str);
+            timeLabel.setText(time);
         }
 
     }
@@ -101,9 +102,9 @@ public class ClockOutController {
         Connection connection = database.getConnection();
         Statement statement = connection.createStatement();
 
-        String str = "SELECT * FROM TimePunches WHERE Employee_ID = '" + employeeID + "' AND CurrentDate = '"+currentDate+"';";
-        System.out.println(str);
+        String str = "SELECT * FROM TimePunches WHERE Employee_ID = '" + employeeID + "' AND CurrentDate = '"+currentDate+"'";
         ResultSet resultSet = statement.executeQuery(str);
+        resultSet.next();
 
         if(resultSet.getString("ClockOutTime") != null)
         {
