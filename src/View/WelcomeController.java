@@ -2,20 +2,16 @@ package View;
 
 import Database.DBConnection;
 import Main.Employee;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 public class WelcomeController
@@ -98,6 +94,8 @@ public class WelcomeController
     public void bringUpRequestOffGui() throws Exception{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("RequestOff.fxml"));
         Parent root1 = (Parent) fxmlLoader.load();
+        RequestOffController controller = fxmlLoader.getController();
+        controller.setEmployeeID(employee.getId());
         Stage stage = new Stage();
         stage.setTitle("Request Off");
         stage.setScene(new Scene(root1));
