@@ -60,13 +60,13 @@ public class ClockOutController {
 
         if(!isNotClockedIn())
         {
-            successText.setText("Your clock out request has failed because ");
+            successText.setText(" ");
             timeLabel.setText("You have not clocked in today");
         }
         else if(isClockedOut())
         {
-            successText.setText("Your clock out request has failed because ");
-            timeLabel.setText("You have already clocked out \n for the day");
+            successText.setText(" ");
+            timeLabel.setText("You have already clocked out \n                for the day");
         }
         else
         {
