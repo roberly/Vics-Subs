@@ -58,7 +58,7 @@ public class ClockOutController {
         Connection connection = database.getConnection();
         Statement statement = connection.createStatement();
 
-        if(!isNotClockedIn())
+        if(!isClockedIn())
         {
             successText.setText(" ");
             timeLabel.setText("You have not clocked in today");
@@ -76,7 +76,7 @@ public class ClockOutController {
         }
 
     }
-    public boolean isNotClockedIn() throws SQLException
+    public boolean isClockedIn() throws SQLException
     {
         boolean clockedIn = true;
         String currentDate = getCurrentDate();
