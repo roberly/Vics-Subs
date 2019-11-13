@@ -72,6 +72,8 @@ public class WelcomeController
     public void bringUpScheduleGui() throws Exception{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Schedule.fxml"));
         Parent root1 = (Parent) fxmlLoader.load();
+        ScheduleController controller = fxmlLoader.getController();
+        controller.onInit(employee.getId());
         Stage stage = new Stage();
         stage.setTitle("Employee Schedule");
         stage.setScene(new Scene(root1));

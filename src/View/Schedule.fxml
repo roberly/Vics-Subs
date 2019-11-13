@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.ScheduleController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.ScheduleController">
    <children>
-      <TableView layoutX="14.0" layoutY="14.0" prefHeight="300.0" prefWidth="600.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+      <TableView fx:id="scheduleTable" layoutX="14.0" layoutY="14.0" prefHeight="300.0" prefWidth="600.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
         <columns>
-          <TableColumn prefWidth="78.0" text="Sunday" />
-          <TableColumn prefWidth="85.0" text="Monday" />
-            <TableColumn prefWidth="83.0" text="Tuesday" />
-            <TableColumn prefWidth="90.0" text="Wednesday" />
-            <TableColumn prefWidth="89.0" text="Thursday" />
-            <TableColumn prefWidth="90.0" text="Friday" />
-            <TableColumn prefWidth="84.0" text="Saturday" />
+          <TableColumn fx:id="sundayCol" prefWidth="78.0" text="Sunday" />
+          <TableColumn fx:id="mondayCol" prefWidth="85.0" text="Monday" />
+            <TableColumn fx:id="tuesdayCol" prefWidth="83.0" text="Tuesday" />
+            <TableColumn fx:id="wednesdayCol" prefWidth="90.0" text="Wednesday" />
+            <TableColumn fx:id="thursdayCol" prefWidth="89.0" text="Thursday" />
+            <TableColumn fx:id="fridayCol" prefWidth="90.0" text="Friday" />
+            <TableColumn fx:id="saturdayCol" prefWidth="84.0" text="Saturday" />
         </columns>
       </TableView>
       <Label layoutX="233.0" layoutY="14.0" prefHeight="30.0" prefWidth="135.0" text="Week of" AnchorPane.leftAnchor="233.0" />

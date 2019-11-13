@@ -16,7 +16,6 @@ import java.util.Date;
 
 public class ClockInController
 {
-
     private DBConnection database = new DBConnection();
     private Connection connection;
     private Statement statement;
