@@ -50,6 +50,15 @@ public class LoginController
                     stage.setScene(new Scene(root1));
                     stage.show();
                 }
+                else
+                {
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("InvalidUsernameOrPassword.fxml"));
+                    Parent root1 = (Parent) fxmlLoader.load();
+                    Stage stage = new Stage();
+                    stage.setTitle("Error");
+                    stage.setScene(new Scene(root1));
+                    stage.show();
+                }
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -87,6 +96,7 @@ public class LoginController
             pfpassword.clear();
 
             userPassOk = false;
+
         }
 
         return userPassOk;
