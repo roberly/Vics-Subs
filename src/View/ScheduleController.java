@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -33,6 +34,8 @@ public class ScheduleController
 
     @FXML
     Button doneButton;
+    @FXML
+    Label weekLabel;
     @FXML
     TableView scheduleTable;
     @FXML
@@ -89,34 +92,44 @@ public class ScheduleController
             while(resultSet.next())
             {
                 String resultDate = resultSet.getString("ShiftDate");
+                String ShiftStartTime = resultSet.getString("ShiftStartTime");
+                String ShiftEndTime = resultSet.getString("ShiftEndTime");
+                int startFirstColon = ShiftStartTime.indexOf(":");
+                int endFirstColon = ShiftEndTime.indexOf(":");
+                int startLength = ShiftStartTime.length();
+                int endLength = ShiftEndTime.length();
+
+                ShiftStartTime = ShiftStartTime.substring(0,startFirstColon+3) + ShiftStartTime.substring(startLength-3,startLength);
+                ShiftEndTime = ShiftEndTime.substring(0,endFirstColon+3) + ShiftEndTime.substring(endLength-3,endLength);
+
                 if(resultDate.equals(week[0]))
                 {
-                    mondayShift = resultSet.getString("ShiftStartTime") + "-" + resultSet.getString("ShiftEndTime");
+                    mondayShift = ShiftStartTime + " - " + ShiftEndTime;
                 }
 
                 else if(resultDate.equals(week[1]))
                 {
-                    tuesdayShift = resultSet.getString("ShiftStartTime") + "-" + resultSet.getString("ShiftEndTime");
+                    tuesdayShift = ShiftStartTime + " - " + ShiftEndTime;
                 }
                 else if(resultDate.equals(week[2]))
                 {
-                    wednesdayShift = resultSet.getString("ShiftStartTime") + "-" + resultSet.getString("ShiftEndTime");
+                    wednesdayShift = ShiftStartTime + " - " + ShiftEndTime;
                 }
                 else if(resultDate.equals(week[3]))
                 {
-                    thursdayShift = resultSet.getString("ShiftStartTime") + "-" + resultSet.getString("ShiftEndTime");
+                    thursdayShift = ShiftStartTime + " - " + ShiftEndTime;
                 }
                 else if(resultDate.equals(week[4]))
                 {
-                    fridayShift = resultSet.getString("ShiftStartTime") + "-" + resultSet.getString("ShiftEndTime");
+                    fridayShift = ShiftStartTime + " - " + ShiftEndTime;
                 }
                 else if(resultDate.equals(week[5]))
                 {
-                    saturdayShift = resultSet.getString("ShiftStartTime") + "-" + resultSet.getString("ShiftEndTime");
+                    saturdayShift = ShiftStartTime + " - " + ShiftEndTime;
                 }
                 else
                 {
-                    sundayShift = resultSet.getString("ShiftStartTime") + "-" + resultSet.getString("ShiftEndTime");
+                    sundayShift = ShiftStartTime + " - " + ShiftEndTime;
                 }
             }
             scheduleData.add(new Schedule(mondayShift, tuesdayShift, wednesdayShift, thursdayShift, fridayShift, saturdayShift, sundayShift));
@@ -148,6 +161,7 @@ public class ScheduleController
             }
             week[i] = current.format(mmddyyyy);
         }
+        weekLabel.setText("Week of " + week[0] + " - " + week[6]);
         return week;
     }
 
