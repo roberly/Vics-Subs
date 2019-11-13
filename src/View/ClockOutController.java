@@ -42,6 +42,7 @@ public class ClockOutController {
         String strDateFormat = "MM/dd/yyyy";
         DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
         String formattedDate= dateFormat.format(date);
+
         return formattedDate;
     }
     public void onInit(int id) throws SQLException {
