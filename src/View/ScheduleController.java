@@ -30,7 +30,6 @@ public class ScheduleController
     private ResultSet resultSet;
 
     private int employeeID;
-    private Schedule schedule;
 
     @FXML
     Button doneButton;
@@ -90,10 +89,11 @@ public class ScheduleController
             while(resultSet.next())
             {
                 String resultDate = resultSet.getString("ShiftDate");
-                if(resultDate == week[0])
+                if(resultDate.equals(week[0]))
                 {
                     mondayShift = resultSet.getString("ShiftStartTime") + "-" + resultSet.getString("ShiftEndTime");
                 }
+
                 else if(resultDate.equals(week[1]))
                 {
                     tuesdayShift = resultSet.getString("ShiftStartTime") + "-" + resultSet.getString("ShiftEndTime");
@@ -119,7 +119,7 @@ public class ScheduleController
                     sundayShift = resultSet.getString("ShiftStartTime") + "-" + resultSet.getString("ShiftEndTime");
                 }
             }
-            scheduleData.add(new Schedule(sundayShift, mondayShift, tuesdayShift, wednesdayShift, thursdayShift, fridayShift, saturdayShift));
+            scheduleData.add(new Schedule(mondayShift, tuesdayShift, wednesdayShift, thursdayShift, fridayShift, saturdayShift, sundayShift));
             connection.close();
             statement.close();
             resultSet.close();

@@ -13,7 +13,7 @@ public class Schedule
     private final StringProperty friday;
     private final StringProperty saturday;
 
-    public Schedule(String sunday, String monday, String tuesday, String wednesday, String thursday, String friday, String saturday)
+    public Schedule(String monday, String tuesday, String wednesday, String thursday, String friday, String saturday, String sunday)
     {
         this.sunday = new SimpleStringProperty(sunday);
         this.monday = new SimpleStringProperty(monday);

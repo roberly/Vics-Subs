@@ -7,13 +7,13 @@
    <children>
       <TableView fx:id="scheduleTable" layoutX="14.0" layoutY="14.0" prefHeight="300.0" prefWidth="600.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
         <columns>
-          <TableColumn fx:id="sundayCol" prefWidth="78.0" text="Sunday" />
-          <TableColumn fx:id="mondayCol" prefWidth="85.0" text="Monday" />
-            <TableColumn fx:id="tuesdayCol" prefWidth="83.0" text="Tuesday" />
-            <TableColumn fx:id="wednesdayCol" prefWidth="90.0" text="Wednesday" />
-            <TableColumn fx:id="thursdayCol" prefWidth="89.0" text="Thursday" />
-            <TableColumn fx:id="fridayCol" prefWidth="90.0" text="Friday" />
-            <TableColumn fx:id="saturdayCol" prefWidth="84.0" text="Saturday" />
+          <TableColumn fx:id="mondayCol" prefWidth="78.0" text="Monday" />
+          <TableColumn fx:id="tuesdayCol" prefWidth="85.0" text="Tuesday" />
+            <TableColumn fx:id="wednesdayCol" prefWidth="83.0" text="Wednesday" />
+            <TableColumn fx:id="thursdayCol" prefWidth="90.0" text="Thursday" />
+            <TableColumn fx:id="fridayCol" prefWidth="89.0" text="Friday" />
+            <TableColumn fx:id="saturdayCol" prefWidth="90.0" text="Saturday" />
+            <TableColumn fx:id="sundayCol" prefWidth="84.0" text="Sunday" />
         </columns>
       </TableView>
       <Label layoutX="233.0" layoutY="14.0" prefHeight="30.0" prefWidth="135.0" text="Week of" AnchorPane.leftAnchor="233.0" />
