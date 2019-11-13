@@ -57,9 +57,9 @@ public class ClockInController
         }
         else
         {
-            //successText.setText("You have already clocked in today. See a manager if this is an error.");
-            successText.setText("Clock In Forbidden");
-            timeLabel.setText("User Already Clocked In");
+
+            successText.setText(" ");
+            timeLabel.setText("You are already clocked in");
         }
     }
 

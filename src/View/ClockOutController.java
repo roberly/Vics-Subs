@@ -42,6 +42,7 @@ public class ClockOutController {
         String strDateFormat = "MM/dd/yyyy";
         DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
         String formattedDate= dateFormat.format(date);
+
         return formattedDate;
     }
     public void onInit(int id) throws SQLException {
@@ -60,13 +61,13 @@ public class ClockOutController {
 
         if(!isClockedIn())
         {
-            successText.setText("Your clock out request has failed because ");
+            successText.setText(" ");
             timeLabel.setText("You have not clocked in today");
         }
         else if(isClockedOut())
         {
-            successText.setText("Your clock out request has failed because ");
-            timeLabel.setText("You have already clocked out \n for the day");
+            successText.setText(" ");
+            timeLabel.setText("You have already clocked out \n                for the day");
         }
         else
         {
