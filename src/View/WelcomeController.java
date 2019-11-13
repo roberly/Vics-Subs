@@ -2,20 +2,16 @@ package View;
 
 import Database.DBConnection;
 import Main.Employee;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 public class WelcomeController
@@ -45,8 +41,8 @@ public class WelcomeController
         ClockInController controller = fxmlLoader.getController();
         controller.onInit(employee.getId());
         Stage stage = new Stage();
+        stage.setScene(new Scene(root1, 500, 200));
         stage.setTitle("Clock In");
-        stage.setScene(new Scene(root1));
         stage.show();
     }
 
@@ -58,10 +54,10 @@ public class WelcomeController
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ClockOut.fxml"));
         Parent root1 = (Parent) fxmlLoader.load();
         ClockOutController controller = fxmlLoader.getController();
-        controller.setEmployeeID(employee.getId());
+        controller.onInit(employee.getId());
         Stage stage = new Stage();
+        stage.setScene(new Scene(root1, 500, 200));
         stage.setTitle("Clock Out");
-        stage.setScene(new Scene(root1));
         stage.show();
     }
 
@@ -72,6 +68,8 @@ public class WelcomeController
     public void bringUpScheduleGui() throws Exception{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Schedule.fxml"));
         Parent root1 = (Parent) fxmlLoader.load();
+        ScheduleController controller = fxmlLoader.getController();
+        controller.onInit(employee.getId());
         Stage stage = new Stage();
         stage.setTitle("Employee Schedule");
         stage.setScene(new Scene(root1));
@@ -85,6 +83,8 @@ public class WelcomeController
     public void bringUpHoursWorkedGui() throws Exception{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("HoursWorked.fxml"));
         Parent root1 = (Parent) fxmlLoader.load();
+        HoursWorkedController controller = fxmlLoader.getController();
+        controller.setEmployeeID(employee.getId());
         Stage stage = new Stage();
         stage.setTitle("View Hours Worked");
         stage.setScene(new Scene(root1));
@@ -98,6 +98,8 @@ public class WelcomeController
     public void bringUpRequestOffGui() throws Exception{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("RequestOff.fxml"));
         Parent root1 = (Parent) fxmlLoader.load();
+        RequestOffController controller = fxmlLoader.getController();
+        controller.setEmployeeID(employee.getId());
         Stage stage = new Stage();
         stage.setTitle("Request Off");
         stage.setScene(new Scene(root1));
@@ -112,6 +114,8 @@ public class WelcomeController
         Stage stage = (Stage) logoutButton.getScene().getWindow();
         stage.close();
     }
+
+
 
 
 
