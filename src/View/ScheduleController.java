@@ -14,6 +14,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
+
 import Main.Schedule;
 
 public class ScheduleController
@@ -31,19 +37,19 @@ public class ScheduleController
     @FXML
     TableView scheduleTable;
     @FXML
-    TableColumn sundayCol;
+    TableColumn<Schedule, String> sundayCol;
     @FXML
-    TableColumn mondayCol;
+    TableColumn<Schedule, String> mondayCol;
     @FXML
-    TableColumn tuesdayCol;
+    TableColumn<Schedule, String> tuesdayCol;
     @FXML
-    TableColumn wednesdayCol;
+    TableColumn<Schedule, String> wednesdayCol;
     @FXML
-    TableColumn thursdayCol;
+    TableColumn<Schedule, String> thursdayCol;
     @FXML
-    TableColumn fridayCol;
+    TableColumn<Schedule, String> fridayCol;
     @FXML
-    TableColumn saturdayCol;
+    TableColumn<Schedule, String> saturdayCol;
 
     public void onInit(int id) throws SQLException
     {
@@ -53,27 +59,16 @@ public class ScheduleController
 
     public void showSchedule() throws SQLException
     {
+        sundayCol.setCellValueFactory(new PropertyValueFactory<Schedule,String>("sunday"));
+        mondayCol.setCellValueFactory(new PropertyValueFactory<Schedule,String>("monday"));
+        tuesdayCol.setCellValueFactory(new PropertyValueFactory<Schedule,String>("tuesday"));
+        wednesdayCol.setCellValueFactory(new PropertyValueFactory<Schedule,String>("wednesday"));
+        thursdayCol.setCellValueFactory(new PropertyValueFactory<Schedule,String>("thursday"));
+        fridayCol.setCellValueFactory(new PropertyValueFactory<Schedule,String>("friday"));
+        saturdayCol.setCellValueFactory(new PropertyValueFactory<Schedule,String>("saturday"));
+
         ObservableList<Schedule> data = getDataFromScheduleAndAddToObservableList();
         scheduleTable.getItems().addAll(data);
-    }
-
-    public void loadSchedule() throws SQLException
-    {
-        DBConnection database = new DBConnection();
-        Connection connection = database.getConnection();
-        Statement statement = connection.createStatement();
-
-        String str = "select * from schedule where Employee_ID = '"+employeeID+"';";
-        System.out.println(str);
-        ResultSet resultSet = statement.executeQuery(str);
-
-        while(resultSet.next())
-        {
-            if(resultSet.getString("DayOfWeek") == "Sunday")
-            {
-                schedule.setSunday(resultSet.getString("ShiftStartTime") + "-" + resultSet.getString("ShiftEndTime"));
-            }
-        }
     }
 
     private ObservableList<Schedule> getDataFromScheduleAndAddToObservableList(){
@@ -84,51 +79,47 @@ public class ScheduleController
             String tuesdayShift = "";
             String wednesdayShift = "";
             String thursdayShift = "";
-            String fridayString = "";
+            String fridayShift = "";
             String saturdayShift = "";
+            String[] week = getWeek();
 
             connection = (Connection) database.getConnection();
             statement = (Statement) connection.createStatement();
             resultSet = statement.executeQuery("SELECT * FROM Schedule WHERE Employee_Id = " + employeeID);//"SELECT * FROM Schedule;"
 
-            if(resultSet.first() == false)
-            {
-                return scheduleData;
-            }
             while(resultSet.next())
             {
-                if(resultSet.getString("DayOfWeek") == "Sunday")
+                String resultDate = resultSet.getString("ShiftDate");
+                if(resultDate == week[0])
                 {
-                    sundayShift = resultSet.getString("ShiftStartTime") + "-" + resultSet.getString("ShiftEndTime");
+                    mondayShift = resultSet.getString("ShiftStartTime") + "-" + resultSet.getString("ShiftEndTime");
                 }
-                else if(resultSet.getString("DayOfWeek") == "Monday")
-                {
-
-                }
-                else if(resultSet.getString("DayOfWeek") == "Tuesday")
+                else if(resultDate.equals(week[1]))
                 {
                     tuesdayShift = resultSet.getString("ShiftStartTime") + "-" + resultSet.getString("ShiftEndTime");
                 }
-                else if(resultSet.getString("DayOfWeek") == "Wednesday")
+                else if(resultDate.equals(week[2]))
                 {
-
+                    wednesdayShift = resultSet.getString("ShiftStartTime") + "-" + resultSet.getString("ShiftEndTime");
                 }
-                else if(resultSet.getString("DayOfWeek") == "Thursday")
+                else if(resultDate.equals(week[3]))
                 {
-
+                    thursdayShift = resultSet.getString("ShiftStartTime") + "-" + resultSet.getString("ShiftEndTime");
                 }
-                else if(resultSet.getString("DayOfWeek") == "Friday")
+                else if(resultDate.equals(week[4]))
                 {
-
+                    fridayShift = resultSet.getString("ShiftStartTime") + "-" + resultSet.getString("ShiftEndTime");
                 }
-                else //if(resultSet.getString("DayOfWeek") == "Saturday")
+                else if(resultDate.equals(week[5]))
                 {
-
+                    saturdayShift = resultSet.getString("ShiftStartTime") + "-" + resultSet.getString("ShiftEndTime");
                 }
-                scheduleData.add(
-                        new Schedule(sundayShift, mondayShift, tuesdayShift, wednesdayShift, thursdayShift, fridayString, saturdayShift
-                ));
+                else
+                {
+                    sundayShift = resultSet.getString("ShiftStartTime") + "-" + resultSet.getString("ShiftEndTime");
+                }
             }
+            scheduleData.add(new Schedule(sundayShift, mondayShift, tuesdayShift, wednesdayShift, thursdayShift, fridayShift, saturdayShift));
             connection.close();
             statement.close();
             resultSet.close();
@@ -139,6 +130,25 @@ public class ScheduleController
 
         }
         return scheduleData;
+    }
+
+    public String[] getWeek()
+    {
+        LocalDate mostRecentMonday =
+                LocalDate.now(ZoneId.of("America/Montreal"))
+                        .with(TemporalAdjusters.previous(DayOfWeek.MONDAY));
+        String week[] = new String[7];
+        LocalDate current = mostRecentMonday;
+        DateTimeFormatter mmddyyyy = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        for (int i = 0; i < 7; i++)
+        {
+            if (i != 0)
+            {
+                current = current.plusDays(1);
+            }
+            week[i] = current.format(mmddyyyy);
+        }
+        return week;
     }
 
     @FXML
