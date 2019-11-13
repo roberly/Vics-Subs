@@ -5,59 +5,79 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.*;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
 
 public class HoursWorkedController {
+
     private int employeeID;
     @FXML
     Button doneButton;
 
+
     @FXML
-    public void handleCloseButtonAction() {
+    public void handleCloseButtonAction() throws SQLException
+    {
         Stage stage = (Stage) doneButton.getScene().getWindow();
         stage.close();
+        System.out.println(getHoursWorked(getWeek()));
     }
-    public void setEmployee_ID(int id) throws SQLException {
+
+    public void setEmployeeID(int id) throws SQLException
+    {
         employeeID = id;
     }
 
-    public static String getCurrentDate()
+    public String[] getWeek()
     {
-        Date date = new Date();
+        LocalDate mostRecentMonday =
+                LocalDate.now( ZoneId.of( "America/Montreal" ) )
+                        .with( TemporalAdjusters.previous( DayOfWeek.MONDAY ) ) ;
+        String week[] = new String[7];
+        LocalDate current = mostRecentMonday;
+        DateTimeFormatter mmddyyyy = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        for(int i = 0; i < 7; i++)
+        {
 
-
-        String strDateFormat = "MM/dd/yyyy";
-        DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
-        String formattedDate= dateFormat.format(date);
-        System.out.println(dateFormat.format(date.before(date)));
-
-        return formattedDate;
+            if(i != 0)
+            {
+                current = current.plusDays(1);
+            }
+            week[i] = current.format(mmddyyyy);
+        }
+//        DateTimeFormatter formatters = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+//        String weekStart = mostRecentMonday.format(formatters);
+//        System.out.println(mostRecentMonday);
+//        System.out.println(weekStart);
+        return week;
     }
-    /*
-    public double computeHoursWorked() throws SQLException
-    {
-        Calendar calendar = Calendar.getInstance();
-        int day = calendar.getFirstDayOfWeek();
-        String currentDate = getCurrentDate();
 
+    public long getHoursWorked(String week[]) throws SQLException
+    {
         DBConnection database = new DBConnection();
         Connection connection = database.getConnection();
         Statement statement = connection.createStatement();
+        String current;
+        long hoursWorked = 0;
 
-        String str = "SELECT * FROM TimePunches WHERE Employee_ID = '" + employeeID + "' AND CurrentDate = '"+currentDate+"';";
-        ResultSet resultSet = statement.executeQuery(str);
-        String ClockInTime = resultSet.getString("ClockInTime");
-        String ClockOutTime = resultSet.getString("ClockOutTime");
+        for(int i = 0; i < 7; i++)
+        {
+            current = week[i];
+            String str = "SELECT * FROM TimePunches WHERE Employee_ID = '" + employeeID + "' AND CurrentDate = '"+current+"';";
+            ResultSet resultSet = statement.executeQuery(str);
+            if(resultSet.first())
+            {
+                Date clockInTime = Date.valueOf(resultSet.getString("ClockInTime"));
+                Date clockOutTime = Date.valueOf(resultSet.getString("ClockOutTime"));
+                hoursWorked = hoursWorked + (clockOutTime.getTime() - clockInTime.getTime());
+            }
+        }
 
-
-
+        return hoursWorked;
     }
-     */
 }
