@@ -41,8 +41,8 @@ public class WelcomeController
         ClockInController controller = fxmlLoader.getController();
         controller.onInit(employee.getId());
         Stage stage = new Stage();
+        stage.setScene(new Scene(root1, 500, 200));
         stage.setTitle("Clock In");
-        stage.setScene(new Scene(root1));
         stage.show();
     }
 
@@ -56,8 +56,8 @@ public class WelcomeController
         ClockOutController controller = fxmlLoader.getController();
         controller.onInit(employee.getId());
         Stage stage = new Stage();
+        stage.setScene(new Scene(root1, 500, 200));
         stage.setTitle("Clock Out");
-        stage.setScene(new Scene(root1));
         stage.show();
     }
 
