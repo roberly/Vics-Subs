@@ -50,11 +50,15 @@ public class RequestOffController {
         Date firstDate = Date.valueOf(startDatePicker.getValue());
         Date secondDate = Date.valueOf(endDatePicker.getValue());
         if (secondDate.after(firstDate) || firstDate.equals(secondDate)) {
-
             String str = "INSERT INTO RequestedTimeOff VALUES (" + employeeID + ", '" + startDate + "', '" + endDate + "', '"
                     + 0 + "')";
             System.out.println("Requested off: " + startDate + "-" + endDate);
             statement.executeUpdate(str);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success!");
+            alert.setHeaderText("Request is Sent");
+            alert.setContentText("Requested off: " + startDate + "-" + endDate);
+            alert.showAndWait();
             Stage stage = (Stage) cancelButton.getScene().getWindow();
             stage.close();
         } else {
@@ -62,7 +66,6 @@ public class RequestOffController {
             alert.setTitle("Error Dialog");
             alert.setHeaderText("Bad Dates!");
             alert.setContentText("The start date cannot be after end date!");
-
             alert.showAndWait();
         }
     }
