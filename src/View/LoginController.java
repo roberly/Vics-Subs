@@ -73,20 +73,38 @@ public class LoginController
         DBConnection database = new DBConnection();
         Connection connection = database.getConnection();
         Statement statement = connection.createStatement();
+        String usernameQueryReturnID = "";
+        String passwordQueryReturnID = "";
 
-        String str = "select * from employee where username = '"+userName+"' and password = '"+password+"';";
+        String str = "select Employee_ID from employee where username = '" + userName + "';";
+        String str2 = "select Employee_ID from Employee where password = '" + password + "';";
+
         System.out.println(str);
-        ResultSet resultSet = statement.executeQuery(str);
+        System.out.println(str2);
 
-        while (resultSet.next())
+        ResultSet usernameQuery = statement.executeQuery(str);
+        if(usernameQuery.next())
+            usernameQueryReturnID = usernameQuery.getString("Employee_ID");
+        ResultSet passwordQuery = statement.executeQuery(str2);
+        if(passwordQuery.next())
+            passwordQueryReturnID = passwordQuery.getString("Employee_ID");
+
+        if(usernameQueryReturnID.equals(passwordQueryReturnID))
         {
-            if(resultSet.getString("username")!=null && resultSet.getString("password")!=null)
+            String str3 = "select * from Employee where Employee_ID = " + usernameQueryReturnID;
+
+            ResultSet resultSet = statement.executeQuery(str3);
+
+            while (resultSet.next())
             {
-                userPassOk = true;
-                employee = new Employee(
-                        resultSet.getString("Employee_ID"),
-                        resultSet.getString("firstName"),
-                        resultSet.getString("lastName"));
+                if(resultSet.getString("username")!=null && resultSet.getString("password")!=null)
+                {
+                    userPassOk = true;
+                    employee = new Employee(
+                            resultSet.getString("Employee_ID"),
+                            resultSet.getString("firstName"),
+                            resultSet.getString("lastName"));
+                }
             }
         }
 
