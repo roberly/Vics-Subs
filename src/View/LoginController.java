@@ -39,19 +39,33 @@ public class LoginController
             String userName = tfusername.getText().trim();
             String password = pfpassword.getText();
 
-            try {
+            try
+            {
                 if (isValidCredentials(userName,password))
                 {
                     tfusername.clear();
                     pfpassword.clear();
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Welcome.fxml"));
-                    Parent root1 = (Parent) fxmlLoader.load();
-                    WelcomeController controller = fxmlLoader.getController();
-                    controller.getEmployeeData(employee);
-                    Stage stage = new Stage();
-                    stage.setTitle("Welcome To Vics!");
-                    stage.setScene(new Scene(root1));
-                    stage.show();
+
+                    if(employee.getIsAdmin())
+                    {
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AdminHomePage.fxml"));
+                        Parent root1 = (Parent) fxmlLoader.load();
+                        Stage stage = new Stage();
+                        stage.setTitle("Welcome To Vic's!");
+                        stage.setScene(new Scene(root1));
+                        stage.show();
+                    }
+                    else
+                    {
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Welcome.fxml"));
+                        Parent root1 = (Parent) fxmlLoader.load();
+                        WelcomeController controller = fxmlLoader.getController();
+                        controller.getEmployeeData(employee);
+                        Stage stage = new Stage();
+                        stage.setTitle("Welcome To Vic's, " + employee.getFirstName() + " " + employee.getLastName() + "!");
+                        stage.setScene(new Scene(root1));
+                        stage.show();
+                    }
                 }
                 else
                 {
@@ -61,8 +75,9 @@ public class LoginController
                     alert.setContentText("Please type in a correct username and password");
                     alert.showAndWait();
                 }
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
+            }
+            catch (SQLException e)
+            {
                 e.printStackTrace();
             }
         }
@@ -96,10 +111,15 @@ public class LoginController
             if(resultSet.getString("username")!=null && resultSet.getString("password")!=null)
             {
                 userPassOk = true;
+                boolean isAdmin = false;
+                if(resultSet.getString("IsAdmin").equals("1"))
+                    isAdmin = true;
+
                 employee = new Employee(
                         resultSet.getString("Employee_ID"),
                         resultSet.getString("firstName"),
-                        resultSet.getString("lastName"));
+                        resultSet.getString("lastName"),
+                        isAdmin);
             }
         }
 
@@ -109,9 +129,7 @@ public class LoginController
             pfpassword.clear();
 
             userPassOk = false;
-
         }
-
         return userPassOk;
     }
 
@@ -119,13 +137,11 @@ public class LoginController
     {
         boolean filledOut;
 
-        if(tfusername.getText().trim().isEmpty()||pfpassword.getText().isEmpty())
-        {
+        if(tfusername.getText().trim().isEmpty() || pfpassword.getText().isEmpty())
             filledOut = false;
-        }
-        else filledOut = true;
+        else
+            filledOut = true;
 
         return filledOut;
     }
-
 }
