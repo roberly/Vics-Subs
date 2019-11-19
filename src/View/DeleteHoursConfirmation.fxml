@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.DeleteHoursController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.DeleteHoursConfirmationController">
    <children>
-      <Label layoutX="205.0" layoutY="80.0" text="Successfully deleted ">
+      <Label layoutX="144.0" layoutY="55.0" text="Are you sure you want to Delete">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label fx:id="UsernameField" layoutX="253.0" layoutY="122.0" text="Username's">
+      <Label fx:id="UsernameField" layoutX="253.0" layoutY="111.0" text="Username's">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Button fx:id="OKButton" layoutX="298.0" layoutY="275.0" mnemonicParsing="false" text="OK" />
+      <Button fx:id="YesButton" layoutX="359.0" layoutY="298.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="63.0" text="Yes" />
       <Label fx:id="ClockInClockOutLabel" layoutX="222.0" layoutY="173.0" text="Clock in/Clock Out on  ">
          <font>
             <Font size="18.0" />
@@ -31,5 +27,6 @@
             <Font size="18.0" />
          </font>
       </Label>
+      <Button fx:id="CancelButton" layoutX="222.0" layoutY="298.0" mnemonicParsing="false" text="Cancel" />
    </children>
 </AnchorPane>

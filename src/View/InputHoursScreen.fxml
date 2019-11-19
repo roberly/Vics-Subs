@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.InputHoursScreenController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.InputHoursScreenController">
    <children>
       <DatePicker fx:id="DatePicker" layoutX="213.0" layoutY="86.0" prefHeight="25.0" prefWidth="218.0" />
       <Label fx:id="DateLabel" layoutX="162.0" layoutY="90.0" text="Date:" />
       <Label fx:id="UsernameLabel" layoutX="148.0" layoutY="149.0" text="Username:" />
       <TextField fx:id="UsernameField" layoutX="213.0" layoutY="145.0" prefHeight="25.0" prefWidth="218.0" text="Please enter the Employee username" />
       <Button fx:id="CancelButton" layoutX="187.0" layoutY="305.0" mnemonicParsing="false" text="Cancel" />
-      <Button fx:id="ClockInButton" layoutX="249.0" layoutY="305.0" mnemonicParsing="false" onMouseClicked="#bringUpClockIn" text="Clock In" />
-      <Button fx:id="DeleteButton" layoutX="406.0" layoutY="305.0" mnemonicParsing="false" onMouseClicked="#bringUpDeleteHours" text="Delete" />
-      <Button fx:id="ClockOutButton" layoutX="322.0" layoutY="305.0" mnemonicParsing="false" onMouseClicked="#bringUpClockOut" text="Clock Out" />
-      <TextField fx:id="TimeField" layoutX="213.0" layoutY="206.0" prefHeight="25.0" prefWidth="218.0" />
+      <Button fx:id="ClockInButton" layoutX="249.0" layoutY="305.0" mnemonicParsing="false" onAction="#bringUpClockIn" onMouseClicked="#bringUpClockIn" text="Clock In" />
+      <Button fx:id="DeleteButton" layoutX="406.0" layoutY="305.0" mnemonicParsing="false" onAction="#bringUpDeleteHours" onMouseClicked="#bringUpDeleteHours" text="Delete" />
+      <Button fx:id="ClockOutButton" layoutX="322.0" layoutY="305.0" mnemonicParsing="false" onAction="#bringUpClockOut" onMouseClicked="#bringUpClockOut" text="Clock Out" />
       <Label fx:id="TimeLabel" layoutX="162.0" layoutY="210.0" text="Time:" />
-      <ChoiceBox fx:id="AMorPMPicker" layoutX="447.0" layoutY="206.0" prefHeight="25.0" prefWidth="40.0" />
+      <ChoiceBox fx:id="TimePicker" layoutX="243.0" layoutY="206.0" prefHeight="25.0" prefWidth="159.0" />
    </children>
 </AnchorPane>
