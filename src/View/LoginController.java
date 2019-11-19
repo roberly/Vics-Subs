@@ -42,6 +42,8 @@ public class LoginController
             try {
                 if (isValidCredentials(userName,password))
                 {
+                    tfusername.clear();
+                    pfpassword.clear();
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Welcome.fxml"));
                     Parent root1 = (Parent) fxmlLoader.load();
                     WelcomeController controller = fxmlLoader.getController();
@@ -77,34 +79,27 @@ public class LoginController
         String passwordQueryReturnID = "";
 
         String str = "select Employee_ID from employee where username = '" + userName + "';";
-        String str2 = "select Employee_ID from Employee where password = '" + password + "';";
 
         System.out.println(str);
-        System.out.println(str2);
 
         ResultSet usernameQuery = statement.executeQuery(str);
         if(usernameQuery.next())
             usernameQueryReturnID = usernameQuery.getString("Employee_ID");
-        ResultSet passwordQuery = statement.executeQuery(str2);
-        if(passwordQuery.next())
-            passwordQueryReturnID = passwordQuery.getString("Employee_ID");
 
-        if(usernameQueryReturnID.equals(passwordQueryReturnID))
+        String str2 = "select * from Employee where Employee_ID = " + usernameQueryReturnID + " AND password = '" + password + "';";
+        System.out.println(str2);
+
+        ResultSet resultSet = statement.executeQuery(str2);
+
+        while (resultSet.next())
         {
-            String str3 = "select * from Employee where Employee_ID = " + usernameQueryReturnID;
-
-            ResultSet resultSet = statement.executeQuery(str3);
-
-            while (resultSet.next())
+            if(resultSet.getString("username")!=null && resultSet.getString("password")!=null)
             {
-                if(resultSet.getString("username")!=null && resultSet.getString("password")!=null)
-                {
-                    userPassOk = true;
-                    employee = new Employee(
-                            resultSet.getString("Employee_ID"),
-                            resultSet.getString("firstName"),
-                            resultSet.getString("lastName"));
-                }
+                userPassOk = true;
+                employee = new Employee(
+                        resultSet.getString("Employee_ID"),
+                        resultSet.getString("firstName"),
+                        resultSet.getString("lastName"));
             }
         }
 
