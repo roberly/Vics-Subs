@@ -15,6 +15,7 @@ public class InputHoursScreenController
     private DBConnection database = new DBConnection();
     private Connection connection = database.getConnection();
     private Statement statement = connection.createStatement();
+
     @FXML
     private DatePicker datePicker;
     @FXML
@@ -22,11 +23,13 @@ public class InputHoursScreenController
     @FXML
     private ChoiceBox TimePicker;
     @FXML
-    Button CancelButton;
+    private Button CancelButton;
 
     public InputHoursScreenController() throws SQLException
     {
+        //TODO
     }
+
     @FXML
     public void bringUpClockIn()
     {
@@ -47,6 +50,7 @@ public class InputHoursScreenController
             alert.showAndWait();
         }
     }
+
     @FXML
     public void bringUpClockOut()
     {
@@ -67,6 +71,7 @@ public class InputHoursScreenController
             alert.showAndWait();
         }
     }
+
     @FXML
     public void bringUpDeleteHours()
     {
@@ -88,6 +93,7 @@ public class InputHoursScreenController
         }
 
     }
+
     @FXML
     public boolean doTheseHoursAndUsernameExist()
     {
@@ -107,8 +113,10 @@ public class InputHoursScreenController
         return doBothExist;
 
     }
+
     @FXML
-    public void handleCloseButtonAction() {
+    public void handleCloseButtonAction()
+    {
         Stage stage = (Stage) CancelButton.getScene().getWindow();
         stage.close();
     }
