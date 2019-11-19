@@ -35,7 +35,7 @@ public class InputHoursScreenController
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Hours inputted successfully");
             alert.setHeaderText("You have inputted hours for " + UsernameField.getText() + "successfully");
-            alert.setContentText("Good Job fucker");
+            alert.setContentText("Good Job homie");
             alert.showAndWait();
         }
         else
@@ -55,7 +55,7 @@ public class InputHoursScreenController
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Clock Out successful");
             alert.setHeaderText("You have updated clocked out hours for " + UsernameField.getText() + "successfully");
-            alert.setContentText("Good Job fucker");
+            alert.setContentText("Good Job homie");
             alert.showAndWait();
         }
         else
@@ -75,7 +75,7 @@ public class InputHoursScreenController
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Hours deleted successfully");
             alert.setHeaderText("You have deleted hours for " + UsernameField.getText() + "successfully");
-            alert.setContentText("Good Job fucker");
+            alert.setContentText("Good Job homie");
             alert.showAndWait();
         }
         else
