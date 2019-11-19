@@ -24,12 +24,14 @@ public class ClockOutController {
     Label successText;
 
     @FXML
-    public void handleCloseButtonAction() {
+    public void handleCloseButtonAction()
+    {
         Stage stage = (Stage) okButton.getScene().getWindow();
         stage.close();
     }
 
-    public static String getCurrentTime() {
+    public static String getCurrentTime()
+    {
         Date date = new Date();
         String strDateFormat = "hh:mm:ss a";
         DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
@@ -45,13 +47,16 @@ public class ClockOutController {
 
         return formattedDate;
     }
-    public void onInit(int id) throws SQLException {
+
+    public void onInit(int id) throws SQLException
+    {
         employeeID = id;
         logClockOut();
     }
 
 
-    public void logClockOut() throws SQLException {
+    public void logClockOut() throws SQLException
+    {
         System.out.println(getCurrentDate() + " " + getCurrentTime());
         String date = getCurrentDate();
         String time = getCurrentTime();
@@ -77,6 +82,7 @@ public class ClockOutController {
         }
 
     }
+
     public boolean isClockedIn() throws SQLException
     {
         boolean clockedIn = true;
@@ -96,7 +102,8 @@ public class ClockOutController {
         return clockedIn;
     }
 
-    public boolean isClockedOut() throws SQLException {
+    public boolean isClockedOut() throws SQLException
+    {
         boolean alreadyClockedOut = false;
         String currentDate = getCurrentDate();
         DBConnection database = new DBConnection();

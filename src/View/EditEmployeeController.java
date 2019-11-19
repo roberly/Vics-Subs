@@ -1,4 +1,5 @@
 package View;
 
-public class EditEmployeeController {
+public class EditEmployeeController
+{
 }

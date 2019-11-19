@@ -13,12 +13,12 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
 
-public class HoursWorkedController {
-
+public class HoursWorkedController
+{
     private int employeeID;
+
     @FXML
     Button doneButton;
-
 
     @FXML
     public void handleCloseButtonAction() throws SQLException
@@ -41,6 +41,7 @@ public class HoursWorkedController {
         String week[] = new String[7];
         LocalDate current = mostRecentMonday;
         DateTimeFormatter mmddyyyy = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+
         for(int i = 0; i < 7; i++)
         {
 

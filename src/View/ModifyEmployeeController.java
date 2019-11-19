@@ -17,7 +17,8 @@ public class ModifyEmployeeController
     Button CancelButton;
 
     @FXML
-    public void bringUpAddEmployee() throws IOException {
+    public void bringUpAddEmployee() throws IOException
+    {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddEmployee.fxml"));
         Parent root1 = (Parent) fxmlLoader.load();
         Stage stage = new Stage();
@@ -25,8 +26,10 @@ public class ModifyEmployeeController
         stage.setScene(new Scene(root1));
         stage.show();
     }
+
     @FXML
-    public void bringUpEditEmployee() throws IOException {
+    public void bringUpEditEmployee() throws IOException
+    {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddEmployee.fxml"));
         Parent root1 = (Parent) fxmlLoader.load();
         Stage stage = new Stage();
@@ -35,8 +38,10 @@ public class ModifyEmployeeController
         stage.show();
 
     }
+
     @FXML
-    public void bringUpDeleteConfirmation() throws IOException {
+    public void bringUpDeleteConfirmation() throws IOException
+    {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("DeleteEmployeeConfirmation.fxml"));
         Parent root1 = (Parent) fxmlLoader.load();
         Stage stage = new Stage();
@@ -47,10 +52,9 @@ public class ModifyEmployeeController
     }
 
     @FXML
-    public void handleCloseButtonAction() {
+    public void handleCloseButtonAction()
+    {
         Stage stage = (Stage) CancelButton.getScene().getWindow();
         stage.close();
     }
-
-
 }

@@ -1,4 +1,5 @@
 package View;
 
-public class DeleteEmployeeController {
+public class DeleteEmployeeController
+{
 }
