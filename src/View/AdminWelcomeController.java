@@ -1,6 +1,6 @@
 package View;
 
-public class AdminHomePageController
+public class AdminWelcomeController
 {
     public void bringUpInputHoursScreen()
     {

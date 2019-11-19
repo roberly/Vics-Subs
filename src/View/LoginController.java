@@ -4,7 +4,6 @@ import Database.DBConnection;
 import Main.Employee;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -12,7 +11,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -48,7 +46,7 @@ public class LoginController
 
                     if(employee.getIsAdmin())
                     {
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AdminHomePage.fxml"));
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AdminWelcome.fxml"));
                         Parent root1 = (Parent) fxmlLoader.load();
                         Stage stage = new Stage();
                         stage.setTitle("Welcome To Vic's!");
@@ -57,9 +55,9 @@ public class LoginController
                     }
                     else
                     {
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Welcome.fxml"));
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("EmployeeWelcome.fxml"));
                         Parent root1 = (Parent) fxmlLoader.load();
-                        WelcomeController controller = fxmlLoader.getController();
+                        EmployeeWelcomeController controller = fxmlLoader.getController();
                         controller.getEmployeeData(employee);
                         Stage stage = new Stage();
                         stage.setTitle("Welcome To Vic's, " + employee.getFirstName() + " " + employee.getLastName() + "!");
@@ -91,7 +89,6 @@ public class LoginController
         Connection connection = database.getConnection();
         Statement statement = connection.createStatement();
         String usernameQueryReturnID = "";
-        String passwordQueryReturnID = "";
 
         String str = "select Employee_ID from employee where username = '" + userName + "';";
 
