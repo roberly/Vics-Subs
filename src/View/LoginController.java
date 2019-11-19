@@ -4,7 +4,6 @@ import Database.DBConnection;
 import Main.Employee;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -12,7 +11,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -39,17 +37,33 @@ public class LoginController
             String userName = tfusername.getText().trim();
             String password = pfpassword.getText();
 
-            try {
+            try
+            {
                 if (isValidCredentials(userName,password))
                 {
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Welcome.fxml"));
-                    Parent root1 = (Parent) fxmlLoader.load();
-                    WelcomeController controller = fxmlLoader.getController();
-                    controller.getEmployeeData(employee);
-                    Stage stage = new Stage();
-                    stage.setTitle("Welcome To Vics!");
-                    stage.setScene(new Scene(root1));
-                    stage.show();
+                    tfusername.clear();
+                    pfpassword.clear();
+
+                    if(employee.getIsAdmin())
+                    {
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AdminWelcome.fxml"));
+                        Parent root1 = (Parent) fxmlLoader.load();
+                        Stage stage = new Stage();
+                        stage.setTitle("Welcome To Vic's!");
+                        stage.setScene(new Scene(root1));
+                        stage.show();
+                    }
+                    else
+                    {
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("EmployeeWelcome.fxml"));
+                        Parent root1 = (Parent) fxmlLoader.load();
+                        EmployeeWelcomeController controller = fxmlLoader.getController();
+                        controller.getEmployeeData(employee);
+                        Stage stage = new Stage();
+                        stage.setTitle("Welcome To Vic's, " + employee.getFirstName() + " " + employee.getLastName() + "!");
+                        stage.setScene(new Scene(root1));
+                        stage.show();
+                    }
                 }
                 else
                 {
@@ -59,8 +73,9 @@ public class LoginController
                     alert.setContentText("Please type in a correct username and password");
                     alert.showAndWait();
                 }
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
+            }
+            catch (SQLException e)
+            {
                 e.printStackTrace();
             }
         }
@@ -73,20 +88,35 @@ public class LoginController
         DBConnection database = new DBConnection();
         Connection connection = database.getConnection();
         Statement statement = connection.createStatement();
+        String usernameQueryReturnID = "";
 
-        String str = "select * from employee where username = '"+userName+"' and password = '"+password+"';";
+        String str = "select Employee_ID from employee where username = '" + userName + "';";
+
         System.out.println(str);
-        ResultSet resultSet = statement.executeQuery(str);
+
+        ResultSet usernameQuery = statement.executeQuery(str);
+        if(usernameQuery.next())
+            usernameQueryReturnID = usernameQuery.getString("Employee_ID");
+
+        String str2 = "select * from Employee where Employee_ID = " + usernameQueryReturnID + " AND password = '" + password + "';";
+        System.out.println(str2);
+
+        ResultSet resultSet = statement.executeQuery(str2);
 
         while (resultSet.next())
         {
             if(resultSet.getString("username")!=null && resultSet.getString("password")!=null)
             {
                 userPassOk = true;
+                boolean isAdmin = false;
+                if(resultSet.getString("IsAdmin").equals("1"))
+                    isAdmin = true;
+
                 employee = new Employee(
                         resultSet.getString("Employee_ID"),
                         resultSet.getString("firstName"),
-                        resultSet.getString("lastName"));
+                        resultSet.getString("lastName"),
+                        isAdmin);
             }
         }
 
@@ -96,9 +126,7 @@ public class LoginController
             pfpassword.clear();
 
             userPassOk = false;
-
         }
-
         return userPassOk;
     }
 
@@ -106,13 +134,11 @@ public class LoginController
     {
         boolean filledOut;
 
-        if(tfusername.getText().trim().isEmpty()||pfpassword.getText().isEmpty())
-        {
+        if(tfusername.getText().trim().isEmpty() || pfpassword.getText().isEmpty())
             filledOut = false;
-        }
-        else filledOut = true;
+        else
+            filledOut = true;
 
         return filledOut;
     }
-
 }

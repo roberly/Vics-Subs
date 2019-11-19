@@ -75,6 +75,7 @@ public class HoursWorkedController {
                 Date clockInTime = Date.valueOf(resultSet.getString("ClockInTime"));
                 Date clockOutTime = Date.valueOf(resultSet.getString("ClockOutTime"));
                 hoursWorked = hoursWorked + (clockOutTime.getTime() - clockInTime.getTime());
+
             }
         }
 

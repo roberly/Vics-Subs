@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.AdminWelcomeController">
+   <children>
+      <Button fx:id="LogoutButton" layoutX="286.0" layoutY="333.0" mnemonicParsing="false" text="Logout" />
+      <Button fx:id="InputHoursButton" layoutX="254.0" layoutY="118.0" mnemonicParsing="false" onMouseClicked="#bringUpInputHoursScreen" text="Input/Delete Hours" />
+      <Button fx:id="ModifyScheduleButton" layoutX="262.0" layoutY="285.0" mnemonicParsing="false" text="Modify Schedule" />
+      <Button fx:id="RequestedDaysOffButton" layoutX="238.0" layoutY="232.0" mnemonicParsing="false" text="View Requested Days Off" />
+      <Button fx:id="ModifyEmployeeAccountButton" layoutX="235.0" layoutY="175.0" mnemonicParsing="false" onMouseClicked="#bringUpModifyEmployee" text="Modify Employee Account" />
+      <Label layoutX="216.0" layoutY="39.0" text="Welcome to Vic's Admin">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

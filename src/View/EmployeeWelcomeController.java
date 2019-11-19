@@ -14,7 +14,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class WelcomeController
+public class EmployeeWelcomeController
 {
     @FXML
     private Label welcomeField;
