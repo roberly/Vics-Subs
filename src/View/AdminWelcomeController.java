@@ -42,10 +42,10 @@ public class AdminWelcomeController
     @FXML
     public void bringUpViewRequestsOff() throws IOException
     {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ModifyEmployee.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ViewRequestsOff.fxml"));
         Parent root1 = (Parent) fxmlLoader.load();
         Stage stage = new Stage();
-        stage.setTitle("Modifying Employee");
+        stage.setTitle("Employee Requests");
         stage.setScene(new Scene(root1));
         stage.show();
 
