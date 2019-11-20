@@ -13,10 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class LoginController
 {
@@ -87,21 +84,13 @@ public class LoginController
 
         DBConnection database = new DBConnection();
         Connection connection = database.getConnection();
-        Statement statement = connection.createStatement();
-        String usernameQueryReturnID = "";
 
-        String str = "select Employee_ID from employee where username = '" + userName + "';";
+        PreparedStatement stmt = connection.prepareStatement("select * from employee where username = ? AND password = ?");
 
-        System.out.println(str);
+        stmt.setString(1, userName);
+        stmt.setString(2, password);
 
-        ResultSet usernameQuery = statement.executeQuery(str);
-        if(usernameQuery.next())
-            usernameQueryReturnID = usernameQuery.getString("Employee_ID");
-
-        String str2 = "select * from Employee where Employee_ID = " + usernameQueryReturnID + " AND password = '" + password + "';";
-        System.out.println(str2);
-
-        ResultSet resultSet = statement.executeQuery(str2);
+        ResultSet resultSet = stmt.executeQuery();
 
         while (resultSet.next())
         {
