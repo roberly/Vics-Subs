@@ -84,7 +84,7 @@ public class EmployeeWelcomeController
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("HoursWorked.fxml"));
         Parent root1 = (Parent) fxmlLoader.load();
         HoursWorkedController controller = fxmlLoader.getController();
-        controller.setEmployeeID(employee.getId());
+        controller.onInit(employee.getId());
         Stage stage = new Stage();
         stage.setTitle("View Hours Worked");
         stage.setScene(new Scene(root1));
