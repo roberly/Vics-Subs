@@ -5,7 +5,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import javax.xml.transform.Result;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.format.DateTimeFormatter;
@@ -31,9 +33,8 @@ public class InputHoursScreenController
     }
 
     @FXML
-    public void bringUpClockIn()
-    {
-        if(doTheseHoursAndUsernameExist())
+    public void bringUpClockIn() throws SQLException {
+        if(doesThisUsernameExist())
         {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Hours inputted successfully");
@@ -52,9 +53,8 @@ public class InputHoursScreenController
     }
 
     @FXML
-    public void bringUpClockOut()
-    {
-        if(doTheseHoursAndUsernameExist())
+    public void bringUpClockOut() throws SQLException {
+        if(!doTheseHoursExist() && doesThisUsernameExist())
         {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Clock Out successful");
@@ -73,9 +73,8 @@ public class InputHoursScreenController
     }
 
     @FXML
-    public void bringUpDeleteHours()
-    {
-        if(doTheseHoursAndUsernameExist())
+    public void bringUpDeleteHours() throws SQLException {
+        if(!doTheseHoursExist() && doesThisUsernameExist())
         {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Hours deleted successfully");
@@ -95,23 +94,37 @@ public class InputHoursScreenController
     }
 
     @FXML
-    public boolean doTheseHoursAndUsernameExist()
-    {
-        boolean doTheseHoursExist = false;
-        boolean doesTheUsernameExist = false;
+    public boolean doTheseHoursExist() throws SQLException {
+        boolean doTheseHoursExist = true;
         boolean doBothExist = false;
 
         String date = datePicker.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-        String username = UsernameField.getText();
         String Time = "" + TimePicker.getValue(); //Ill come back to this
 
-        if(doesTheUsernameExist && doTheseHoursExist)
+
+            String hoursCheck = "Select from TimePunches where EmployeeID = "  + "and CurrentDate = '" + date + "'";
+            ResultSet newResultSet = statement.executeQuery(hoursCheck);
+
+            if(newResultSet.first())
+            {
+                doTheseHoursExist = false;
+            }
+
+
+        return doTheseHoursExist;
+
+    }
+    public boolean doesThisUsernameExist() throws SQLException
+    {
+        boolean doesTheUsernameExist = true;
+        String username = UsernameField.getText();
+        String usernameCheck = "Select from Employee where Username = '" + username + "'";
+        ResultSet resultSet = statement.executeQuery(usernameCheck);
+        if(resultSet.first())
         {
-            doBothExist = true;
+            doesTheUsernameExist = false;
         }
-
-        return doBothExist;
-
+        return doesTheUsernameExist;
     }
 
     @FXML
