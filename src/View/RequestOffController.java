@@ -50,8 +50,8 @@ public class RequestOffController {
         Date firstDate = Date.valueOf(startDatePicker.getValue());
         Date secondDate = Date.valueOf(endDatePicker.getValue());
         if (secondDate.after(firstDate) || firstDate.equals(secondDate)) {
-            String str = "INSERT INTO RequestedTimeOff VALUES (" + employeeID + ", '" + startDate + "', '" + endDate + "', '"
-                    + 0 + "')";
+            String str = "INSERT INTO RequestedTimeOff (Employee_ID, StartDate, EndDate) VALUES " +
+                    "(" + employeeID + ", '" + startDate + "', '" + endDate + "')";
             System.out.println("Requested off: " + startDate + "-" + endDate);
             statement.executeUpdate(str);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
