@@ -104,34 +104,25 @@ public class ScheduleController
                 ShiftEndTime = ShiftEndTime.substring(0,endFirstColon+3) + ShiftEndTime.substring(endLength-3,endLength);
 
                 if(resultDate.equals(week[0]))
-                {
                     mondayShift = ShiftStartTime + " - " + ShiftEndTime;
-                }
 
                 else if(resultDate.equals(week[1]))
-                {
                     tuesdayShift = ShiftStartTime + " - " + ShiftEndTime;
-                }
+
                 else if(resultDate.equals(week[2]))
-                {
                     wednesdayShift = ShiftStartTime + " - " + ShiftEndTime;
-                }
+
                 else if(resultDate.equals(week[3]))
-                {
                     thursdayShift = ShiftStartTime + " - " + ShiftEndTime;
-                }
+
                 else if(resultDate.equals(week[4]))
-                {
                     fridayShift = ShiftStartTime + " - " + ShiftEndTime;
-                }
+
                 else if(resultDate.equals(week[5]))
-                {
                     saturdayShift = ShiftStartTime + " - " + ShiftEndTime;
-                }
-                else
-                {
+
+                else if(resultDate.equals(week[6]))
                     sundayShift = ShiftStartTime + " - " + ShiftEndTime;
-                }
             }
             scheduleData.add(new Schedule(mondayShift, tuesdayShift, wednesdayShift, thursdayShift, fridayShift, saturdayShift, sundayShift));
             connection.close();
