@@ -16,7 +16,7 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Label fx:id="InsertUsernameField" layoutX="247.0" layoutY="183.0" text="Username">
+      <Label fx:id="InsertUsernameField" layoutX="247.0" layoutY="183.0" text="this user!">
          <font>
             <Font size="24.0" />
          </font>
@@ -26,6 +26,6 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Button fx:id="OKButton" layoutX="278.0" layoutY="316.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="51.0" text="OK" />
+      <Button fx:id="OKButton" layoutX="278.0" layoutY="316.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="51.0" onAction="#handleCloseButtonAction" text="OK" />
    </children>
 </AnchorPane>
