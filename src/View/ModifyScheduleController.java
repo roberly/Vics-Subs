@@ -31,8 +31,6 @@ public class ModifyScheduleController
     private Statement statement;
     private ResultSet resultSet;
 
-    private int employeeID;
-
     @FXML
     Button doneButton;
     @FXML
@@ -173,7 +171,7 @@ public class ModifyScheduleController
             {
                 current = current.plusDays(1);
             }
-            week[i] = current.minusDays(7).format(mmddyyyy);
+            week[i] = current.format(mmddyyyy);
         }
         weekLabel.setText("Week of " + week[0] + " - " + week[6]);
         return week;
