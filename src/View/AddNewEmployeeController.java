@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import java.awt.*;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -66,8 +67,7 @@ public class AddNewEmployeeController
         return employed;
     }
     @FXML
-    private void addUser() throws SQLException
-    {
+    private void addUser() throws SQLException, IOException {
         String Firstname = FirstField.getText().trim();
         String Lastname = LastField.getText();
         String username = UserField.getText();
@@ -96,6 +96,7 @@ public class AddNewEmployeeController
             statement.executeUpdate(str);
             Stage stage = (Stage) AddButton.getScene().getWindow();
             stage.close();}
+            bringAdded();
         }
         else
         {
@@ -111,9 +112,14 @@ public class AddNewEmployeeController
         }
 
     }
-    public void onInit() throws SQLException
+    @FXML
+    public void bringAdded() throws IOException
     {
-        //employeeID = id;
-        addUser();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddedUser.fxml"));
+        Parent root1 = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.setTitle("They have been Added!");
+        stage.setScene(new Scene(root1));
+        stage.show();
     }
 }

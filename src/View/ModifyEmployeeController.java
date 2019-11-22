@@ -50,6 +50,8 @@ public class ModifyEmployeeController
         stage.setTitle("Add New Employee");
         stage.setScene(new Scene(root1));
         stage.show();
+        FirstNameField.clear();
+        LastNameField.clear();
     }
 
     @FXML
@@ -61,7 +63,8 @@ public class ModifyEmployeeController
         stage.setTitle("Edit Existing Employee");
         stage.setScene(new Scene(root1));
         stage.show();
-
+        FirstNameField.clear();
+        LastNameField.clear();
     }
 
     @FXML
@@ -75,6 +78,8 @@ public class ModifyEmployeeController
         stage.setTitle("Delete an Employee");
         stage.setScene(new Scene(root1));
         stage.show();
+        FirstNameField.clear();
+        LastNameField.clear();
 
     }
 
