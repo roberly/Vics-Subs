@@ -3,6 +3,8 @@ package View;
 import Database.DBConnection;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
 import java.sql.*;
@@ -25,17 +27,35 @@ public class HoursWorkedController
 
     @FXML
     Button doneButton;
+    @FXML
+    Label hoursWorked;
+//    @FXML
+//    TableView scheduleTable;
+//    @FXML
+//    TableColumn<Schedule, String> sundayCol;
+//    @FXML
+//    TableColumn<Schedule, String> mondayCol;
+//    @FXML
+//    TableColumn<Schedule, String> tuesdayCol;
+//    @FXML
+//    TableColumn<Schedule, String> wednesdayCol;
+//    @FXML
+//    TableColumn<Schedule, String> thursdayCol;
+//    @FXML
+//    TableColumn<Schedule, String> fridayCol;
+//    @FXML
+//    TableColumn<Schedule, String> saturdayCol;
+
 
     @FXML
     public void handleCloseButtonAction() throws SQLException, ParseException {
         Stage stage = (Stage) doneButton.getScene().getWindow();
         stage.close();
-        System.out.println(getHoursWorked(getWeek()));
     }
 
-    public void onInit(int id) throws SQLException
-    {
+    public void onInit(int id) throws SQLException, ParseException {
         employeeID = id;
+        hoursWorked.setText(getHoursWorked(getWeek()));
     }
 
     public String[] getWeek()
@@ -63,7 +83,7 @@ public class HoursWorkedController
         return week;
     }
 
-    public long getHoursWorked(String week[]) throws SQLException, ParseException {
+    public String getHoursWorked(String week[]) throws SQLException, ParseException {
         DBConnection database = new DBConnection();
         Connection connection = database.getConnection();
         Statement statement = connection.createStatement();
@@ -90,13 +110,13 @@ public class HoursWorkedController
             }
         }
 
-        current = String.format("%d min, %d sec",
-                TimeUnit.MILLISECONDS.toMinutes(hoursWorked),
-                TimeUnit.MILLISECONDS.toSeconds(hoursWorked) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(hoursWorked))
-        );
+        long totalSecs = hoursWorked/1000;
+        long hours = (totalSecs / 3600);
+        long mins = (totalSecs / 60) % 60;
+        System.out.println(hours);
+        System.out.println(mins);
+        String hrsworked = hours + " hours and " + mins + " minutes";
 
-        System.out.println(current);
-        return hoursWorked;
+        return hrsworked;
     }
 }
