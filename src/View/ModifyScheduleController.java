@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 
 public class ModifyScheduleController
 {
@@ -69,6 +71,9 @@ public class ModifyScheduleController
 
         ObservableList<Schedule> data = getDataFromScheduleAndAddToObservableList();
         scheduleTable.getItems().addAll(data);
+
+        scheduleTable.getSelectionModel().setCellSelectionEnabled(true);
+        //Add double click listener to the table, double click will pop up an edit window in theory
     }
 
     private ObservableList<Schedule> getDataFromScheduleAndAddToObservableList(){
@@ -85,57 +90,64 @@ public class ModifyScheduleController
 
             connection = (Connection) database.getConnection();
             statement = (Statement) connection.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM Schedule");//"SELECT * FROM Schedule;"
+            resultSet = statement.executeQuery("SELECT * FROM Employee");
+
+            ArrayList<Integer> EmployeeIDs = new ArrayList<>();
+            ArrayList<String> EmployeeNames = new ArrayList<>();
 
             while(resultSet.next())
             {
-                String resultDate = resultSet.getString("ShiftDate");
-                String ShiftStartTime = resultSet.getString("ShiftStartTime");
-                String ShiftEndTime = resultSet.getString("ShiftEndTime");
-                int startFirstColon = ShiftStartTime.indexOf(":");
-                int endFirstColon = ShiftEndTime.indexOf(":");
-                int startLength = ShiftStartTime.length();
-                int endLength = ShiftEndTime.length();
-
-                ShiftStartTime = ShiftStartTime.substring(0,startFirstColon+3) + ShiftStartTime.substring(startLength-3,startLength);
-                ShiftEndTime = ShiftEndTime.substring(0,endFirstColon+3) + ShiftEndTime.substring(endLength-3,endLength);
-
-                if(resultDate.equals(week[0]))
-                    mondayShift = ShiftStartTime + " - " + ShiftEndTime;
-                else
-                    mondayShift = "";
-
-                if(resultDate.equals(week[1]))
-                    tuesdayShift = ShiftStartTime + " - " + ShiftEndTime;
-                else
-                    tuesdayShift = "";
-
-                if(resultDate.equals(week[2]))
-                    wednesdayShift = ShiftStartTime + " - " + ShiftEndTime;
-                else
-                    wednesdayShift = "";
-
-                if(resultDate.equals(week[3]))
-                    thursdayShift = ShiftStartTime + " - " + ShiftEndTime;
-                else
-                    thursdayShift = "";
-
-                if(resultDate.equals(week[4]))
-                    fridayShift = ShiftStartTime + " - " + ShiftEndTime;
-                else
-                    fridayShift = "";
-
-                if(resultDate.equals(week[5]))
-                    saturdayShift = ShiftStartTime + " - " + ShiftEndTime;
-                else
-                    saturdayShift = "";
-
-                if(resultDate.equals(week[6]))
-                    sundayShift = ShiftStartTime + " - " + ShiftEndTime;
-                else
-                    sundayShift = "";
+                EmployeeIDs.add(resultSet.getInt("Employee_ID"));
+                EmployeeNames.add(resultSet.getString("FirstName") + " " + resultSet.getString("LastName"));
             }
-            scheduleData.add(new Schedule(mondayShift, tuesdayShift, wednesdayShift, thursdayShift, fridayShift, saturdayShift, sundayShift));
+
+            for(int i = 0; i < EmployeeIDs.size(); i++)
+            {
+                resultSet = statement.executeQuery("SELECT * from Schedule where Employee_Id = " + EmployeeIDs.get(i));
+                mondayShift = "";
+                tuesdayShift = "";
+                wednesdayShift = "";
+                thursdayShift = "";
+                fridayShift = "";
+                saturdayShift = "";
+                sundayShift = "";
+
+                while(resultSet.next())
+                {
+                    String resultDate = resultSet.getString("ShiftDate");
+                    String ShiftStartTime = resultSet.getString("ShiftStartTime");
+                    String ShiftEndTime = resultSet.getString("ShiftEndTime");
+                    int startFirstColon = ShiftStartTime.indexOf(":");
+                    int endFirstColon = ShiftEndTime.indexOf(":");
+                    int startLength = ShiftStartTime.length();
+                    int endLength = ShiftEndTime.length();
+
+                    ShiftStartTime = ShiftStartTime.substring(0, startFirstColon + 3) + ShiftStartTime.substring(startLength - 3, startLength);
+                    ShiftEndTime = ShiftEndTime.substring(0, endFirstColon + 3) + ShiftEndTime.substring(endLength - 3, endLength);
+
+                    if (resultDate.equals(week[0]))
+                        mondayShift = ShiftStartTime + " - " + ShiftEndTime;
+
+                    else if (resultDate.equals(week[1]))
+                        tuesdayShift = ShiftStartTime + " - " + ShiftEndTime;
+
+                    else if (resultDate.equals(week[2]))
+                        wednesdayShift = ShiftStartTime + " - " + ShiftEndTime;
+
+                    else if (resultDate.equals(week[3]))
+                        thursdayShift = ShiftStartTime + " - " + ShiftEndTime;
+
+                    else if (resultDate.equals(week[4]))
+                        fridayShift = ShiftStartTime + " - " + ShiftEndTime;
+
+                    else if (resultDate.equals(week[5]))
+                        saturdayShift = ShiftStartTime + " - " + ShiftEndTime;
+
+                    else if (resultDate.equals(week[6]))
+                        sundayShift = ShiftStartTime + " - " + ShiftEndTime;
+                }
+                scheduleData.add(new Schedule(mondayShift, tuesdayShift, wednesdayShift, thursdayShift, fridayShift, saturdayShift, sundayShift));
+            }
             connection.close();
             statement.close();
             resultSet.close();
@@ -143,7 +155,6 @@ public class ModifyScheduleController
         catch (SQLException e)
         {
             e.printStackTrace();
-
         }
         return scheduleData;
     }
