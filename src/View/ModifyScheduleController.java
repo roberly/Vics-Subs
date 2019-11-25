@@ -1,6 +1,7 @@
 package View;
 
 import Database.DBConnection;
+import Main.Employee;
 import Main.Schedule;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -37,6 +38,8 @@ public class ModifyScheduleController
     Label weekLabel;
     @FXML
     TableView scheduleTable;
+    @FXML
+    TableColumn<Employee, String> employeeCol;
     @FXML
     TableColumn<Schedule, String> sundayCol;
     @FXML
