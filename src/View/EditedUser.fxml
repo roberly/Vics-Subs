@@ -9,25 +9,24 @@
 <?import javafx.scene.text.Font?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="View.AddedUserController"
+            fx:controller="View.EditedUserController"
             prefHeight="400.0" prefWidth="600.0">
     <children>
-        <Label layoutX="144.0" layoutY="113.0" text="You have successfully added ">
+        <Label layoutX="144.0" layoutY="113.0" text="You have successfully Edited ">
             <font>
                 <Font size="24.0" />
             </font>
         </Label>
-        <Label fx:id="InsertUsernameField" layoutX="247.0" layoutY="183.0" text="This user!">
+        <Label fx:id="InsertUsernameField" layoutX="247.0" layoutY="183.0" text="This user">
             <font>
                 <Font size="24.0" />
             </font>
         </Label>
-        <Label layoutX="205.0" layoutY="266.0" text="To the database">
+        <Label layoutX="205.0" layoutY="266.0" text="In the database">
             <font>
                 <Font size="24.0" />
             </font>
         </Label>
         <Button fx:id="OKButton" layoutX="278.0" layoutY="316.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="51.0" onAction="#handleCloseButtonAction" text="OK" />
     </children>
-
 </AnchorPane>

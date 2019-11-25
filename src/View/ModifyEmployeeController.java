@@ -59,6 +59,8 @@ public class ModifyEmployeeController
     {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("EditEmployee.fxml"));
         Parent root1 = (Parent) fxmlLoader.load();
+        EditEmployeeController control = fxmlLoader.getController();
+        control.onInit(FirstNameField.getText(), LastNameField.getText());
         Stage stage = new Stage();
         stage.setTitle("Edit Existing Employee");
         stage.setScene(new Scene(root1));
