@@ -5,13 +5,12 @@ import Main.Employee;
 import Main.Schedule;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
@@ -39,7 +38,7 @@ public class ModifyScheduleController
     @FXML
     TableView scheduleTable;
     @FXML
-    TableColumn<Employee, String> employeeCol;
+    TableColumn<Schedule, String> employeeCol;
     @FXML
     TableColumn<Schedule, String> sundayCol;
     @FXML
@@ -62,6 +61,7 @@ public class ModifyScheduleController
 
     public void showSchedule() throws SQLException
     {
+        employeeCol.setCellValueFactory(new PropertyValueFactory<Schedule, String>("employee"));
         sundayCol.setCellValueFactory(new PropertyValueFactory<Schedule,String>("sunday"));
         mondayCol.setCellValueFactory(new PropertyValueFactory<Schedule,String>("monday"));
         tuesdayCol.setCellValueFactory(new PropertyValueFactory<Schedule,String>("tuesday"));
@@ -73,8 +73,25 @@ public class ModifyScheduleController
         ObservableList<Schedule> data = getDataFromScheduleAndAddToObservableList();
         scheduleTable.getItems().addAll(data);
 
+        scheduleTable.setEditable(true);
         scheduleTable.getSelectionModel().setCellSelectionEnabled(true);
-        //Add double click listener to the table, double click will pop up an edit window in theory
+
+        scheduleTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent click) {
+                if (click.getClickCount() == 2) {
+                    @SuppressWarnings("rawtypes")
+                    TablePosition pos = (TablePosition) scheduleTable.getSelectionModel().getSelectedCells().get(0);
+                    int row = pos.getRow();
+                    int col = pos.getColumn();
+                    @SuppressWarnings("rawtypes")
+                    TableColumn column = pos.getTableColumn();
+                    String val = column.getCellData(row).toString();
+                    System.out.println("Selected Value, " + val + ", Column: " + col + ", Row: " + row);
+                    //Do thing
+                }
+            }
+        });
     }
 
     private ObservableList<Schedule> getDataFromScheduleAndAddToObservableList(){
@@ -87,24 +104,26 @@ public class ModifyScheduleController
             String thursdayShift = "";
             String fridayShift = "";
             String saturdayShift = "";
+            String employee = "";
             String[] week = getWeek();
 
             connection = (Connection) database.getConnection();
             statement = (Statement) connection.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM Employee");
+            resultSet = statement.executeQuery("SELECT * FROM Employee WHERE IsAdmin = 0");
 
             ArrayList<Integer> EmployeeIDs = new ArrayList<>();
             ArrayList<String> EmployeeNames = new ArrayList<>();
 
             while(resultSet.next())
             {
-                EmployeeIDs.add(resultSet.getInt("Employee_ID"));
+                EmployeeIDs.add(resultSet.getInt("Employee_Id"));
                 EmployeeNames.add(resultSet.getString("FirstName") + " " + resultSet.getString("LastName"));
             }
 
             for(int i = 0; i < EmployeeIDs.size(); i++)
             {
                 resultSet = statement.executeQuery("SELECT * from Schedule where Employee_Id = " + EmployeeIDs.get(i));
+                employee = EmployeeNames.get(i);
                 mondayShift = "";
                 tuesdayShift = "";
                 wednesdayShift = "";
@@ -147,7 +166,7 @@ public class ModifyScheduleController
                     else if (resultDate.equals(week[6]))
                         sundayShift = ShiftStartTime + " - " + ShiftEndTime;
                 }
-                scheduleData.add(new Schedule(mondayShift, tuesdayShift, wednesdayShift, thursdayShift, fridayShift, saturdayShift, sundayShift));
+                scheduleData.add(new Schedule(employee, mondayShift, tuesdayShift, wednesdayShift, thursdayShift, fridayShift, saturdayShift, sundayShift));
             }
             connection.close();
             statement.close();
