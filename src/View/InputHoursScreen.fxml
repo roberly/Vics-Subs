@@ -5,7 +5,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.InputHoursScreenController">
    <children>
-      <DatePicker fx:id="DatePicker" layoutX="213.0" layoutY="86.0" prefHeight="25.0" prefWidth="218.0" />
+      <DatePicker fx:id="datePicker" layoutX="213.0" layoutY="86.0" prefHeight="25.0" prefWidth="218.0" />
       <Label fx:id="DateLabel" layoutX="162.0" layoutY="90.0" text="Date:" />
       <Label fx:id="UsernameLabel" layoutX="148.0" layoutY="149.0" text="Username:" />
       <TextField fx:id="UsernameField" layoutX="213.0" layoutY="145.0" prefHeight="25.0" prefWidth="218.0" text="Please enter the Employee username" />

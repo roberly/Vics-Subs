@@ -21,13 +21,13 @@ public class InputHoursScreenController
     private Statement statement = connection.createStatement();
 
     @FXML
-    private DatePicker datePicker;
+    DatePicker datePicker;
     @FXML
-    private TextField UsernameField;
+    TextField UsernameField;
     @FXML
-    private ChoiceBox TimePicker;
+    ChoiceBox TimePicker;
     @FXML
-    private Button CancelButton;
+    Button CancelButton;
 
     private String username;
     private String date;
@@ -39,25 +39,60 @@ public class InputHoursScreenController
     }
     public void initialize()
     {
-        date = datePicker.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-        time = "" + TimePicker.getValue(); //Ill come back to this
-        username = UsernameField.getText();
         ObservableList<String> choices;
         choices = FXCollections.observableArrayList();
-        choices.addAll("9:30", "10:00","10:30","11:00","11:30","12:00","12:30","1:00","1:30","2:00","2:30","3:00","3:30","4:00","4:30","5:00","5:30","6:00","6:30","7:00","7:30","8:00","8:30","9:00","9:30","10:00");
+        choices.addAll("9:30 AM", "10:00 AM","10:30 AM","11:00 AM","11:30 AM","12:00 PM","12:30 PM","1:00 PM","1:30 PM","2:00 PM","2:30 PM","3:00 PM","3:30 PM","4:00 PM","4:30 PM","5:00 PM","5:30 PM","6:00 PM","6:30 PM","7:00 PM","7:30 PM","8:00 PM","8:30 PM","9:00 PM","9:30 PM","10:00 PM");
         TimePicker.setItems(choices);
     }
 
     @FXML
     public void bringUpClockIn() throws SQLException {
-        if(doesThisUsernameExist())
+        if(doesThisUsernameExist() && !doesTheClockInExist())
         {
-            String inputHours = "Insert into TimePunches ( Employee_ID, ClockInTime, ClockOutTime, CurrentDate) Values (" + getEmployeeID() + ",'" + time + "'," + "null" + ",'" + date + "')";
-            statement.executeQuery(inputHours);
+            String inputHours = "Insert into TimePunches ( Employee_ID, ClockInTime, CurrentDate) Values (" + getEmployeeID() + ",'" + time + "', '" + date + "')";
+            statement.executeUpdate(inputHours);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Hours inputted successfully");
             alert.setHeaderText("You have inputted hours for " + UsernameField.getText() + "successfully");
             alert.setContentText("Good Job homie");
+            alert.showAndWait();
+        }
+        else if(!doesThisUsernameExist())
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid Username");
+            alert.setHeaderText("Invalid Username");
+            alert.setContentText("Please type in a correct username");
+            alert.showAndWait();
+        }
+        else
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Clock in exists already");
+            alert.setHeaderText("Clock in exists already");
+            alert.setContentText("A clock in for " + username + " already exists on " + date);
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    public void bringUpClockOut() throws SQLException {
+        if(doesTheClockInExist() && doesThisUsernameExist())
+        {
+            String inputClockOut = "update TimePunches set ClockOutTime = '" + time + "' where Employee_ID =" + getEmployeeID() + " and CurrentDate = '" + date + "'";
+            statement.executeUpdate(inputClockOut);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Clock Out successful");
+            alert.setHeaderText("You have clocked out " + username +" on " + date + " successfully");
+            alert.setContentText("Good Job homie");
+            alert.showAndWait();
+        }
+        else if(!doesTheClockInExist())
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("ClockIn on this date does not exist");
+            alert.setContentText("Please type in a correct date or enter a clock in on this date");
             alert.showAndWait();
         }
         else
@@ -66,26 +101,6 @@ public class InputHoursScreenController
             alert.setTitle("Invalid Username");
             alert.setHeaderText("Invalid Username");
             alert.setContentText("Please type in a correct username");
-            alert.showAndWait();
-        }
-    }
-
-    @FXML
-    public void bringUpClockOut() throws SQLException {
-        if(!doesTheClockInExist() && doesThisUsernameExist())
-        {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Clock Out successful");
-            alert.setHeaderText("You have updated clocked out hours for " + UsernameField.getText() + "successfully");
-            alert.setContentText("Good Job homie");
-            alert.showAndWait();
-        }
-        else
-        {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("ClockIn on this date does not exist");
-            alert.setContentText("Please type in a correct date or enter a clock in on this date");
             alert.showAndWait();
         }
     }
@@ -113,10 +128,14 @@ public class InputHoursScreenController
     @FXML
     public boolean doesTheClockInExist() throws SQLException
     {
+        date = datePicker.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+        time = "" + TimePicker.getValue(); //Ill come back to this
+        username = UsernameField.getText();
         boolean doesTheClockInExist = true;
-        String checkClockIn = "Select * from TimePunches where CurrentDate = '" + date + "'" + " and username = '" + username + "'";
+        String checkClockIn = "Select * from TimePunches where Employee_ID = " + getEmployeeID() + " and CurrentDate = '" + date + "'";
         ResultSet resultSet = statement.executeQuery(checkClockIn);
-        if(resultSet.first()) {
+        if(!resultSet.first())
+        {
             doesTheClockInExist = false;
         }
 
@@ -125,6 +144,8 @@ public class InputHoursScreenController
     @FXML
     public boolean doTheseHoursExist() throws SQLException
     {
+        date = datePicker.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+        time = "" + TimePicker.getValue(); //Ill come back to this
         boolean doTheseHoursExist = true;
         String hoursCheck = "Select * from TimePunches where EmployeeID = "  + "and CurrentDate = '" + date + "'";
         ResultSet newResultSet = statement.executeQuery(hoursCheck);
@@ -138,9 +159,11 @@ public class InputHoursScreenController
 
     public boolean doesThisUsernameExist() throws SQLException
     {
+        username = UsernameField.getText();
         boolean doesTheUsernameExist = true;
-        String usernameCheck = "Select Employee_ID from Employee where Username = '" + username + "'";
+        String usernameCheck = "Select * from Employee where Username = '" + username + "'";
         ResultSet resultSet = statement.executeQuery(usernameCheck);
+
         if(!resultSet.first())
         {
             doesTheUsernameExist = false;
@@ -153,6 +176,7 @@ public class InputHoursScreenController
         {
             String getEmployeeID = "Select Employee_ID from Employee where Username = '" + username + "'";
             ResultSet resultSet = statement.executeQuery(getEmployeeID);
+            resultSet.next();
             employeeID = resultSet.getInt("Employee_ID");
         }
         return employeeID;
