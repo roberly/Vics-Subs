@@ -7,12 +7,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -54,6 +58,10 @@ public class ModifyScheduleController
     @FXML
     TableColumn<Schedule, String> saturdayCol;
 
+    ArrayList<Integer> EmployeeIDs = new ArrayList<>();
+    ArrayList<String> EmployeeNames = new ArrayList<>();
+    String week[] = new String[7];
+
     public void initialize() throws SQLException
     {
         showSchedule();
@@ -89,6 +97,28 @@ public class ModifyScheduleController
                     String val = column.getCellData(row).toString();
                     System.out.println("Selected Value, " + val + ", Column: " + col + ", Row: " + row);
 
+                    if(val.equals(""))
+                    {
+                        try
+                        {
+                            addShift(col, EmployeeIDs.get(row));
+                        }
+                        catch (IOException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            changeShift(val, col, EmployeeIDs.get(row));
+                        }
+                        catch (IOException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
                     //Do thing
                     //If its empty, we will want to do an insert of a new shift
                     //If it exists, we will want to do an update of the shift. Maybe find a way to bind the shift ID to
@@ -97,6 +127,28 @@ public class ModifyScheduleController
                 }
             }
         });
+    }
+
+    private void addShift(int weekColumn, int employeeID) throws IOException
+    {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddShift.fxml"));
+        Parent root1 = (Parent) fxmlLoader.load();
+        AddShiftController controller = fxmlLoader.getController();
+        controller.onInit(week[weekColumn], employeeID);
+        Stage stage = new Stage();
+        stage.setTitle("Add New Shift");
+        stage.setScene(new Scene(root1));
+        stage.show();
+    }
+
+    private void changeShift(String currentShift, int weekColumn, int employeeID) throws IOException
+    {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("EditShift.fxml"));
+        Parent root1 = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.setTitle("Alter Shift");
+        stage.setScene(new Scene(root1));
+        stage.show();
     }
 
     private ObservableList<Schedule> getDataFromScheduleAndAddToObservableList(){
@@ -115,9 +167,6 @@ public class ModifyScheduleController
             connection = (Connection) database.getConnection();
             statement = (Statement) connection.createStatement();
             resultSet = statement.executeQuery("SELECT * FROM Employee WHERE IsAdmin = 0");
-
-            ArrayList<Integer> EmployeeIDs = new ArrayList<>();
-            ArrayList<String> EmployeeNames = new ArrayList<>();
 
             while(resultSet.next())
             {
@@ -189,7 +238,6 @@ public class ModifyScheduleController
         LocalDate mostRecentMonday =
                 LocalDate.now(ZoneId.of("America/Montreal"))
                         .with(TemporalAdjusters.previous(DayOfWeek.MONDAY));
-        String week[] = new String[7];
         LocalDate current = mostRecentMonday;
         DateTimeFormatter mmddyyyy = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         for (int i = 0; i < 7; i++)
