@@ -88,7 +88,12 @@ public class ModifyScheduleController
                     TableColumn column = pos.getTableColumn();
                     String val = column.getCellData(row).toString();
                     System.out.println("Selected Value, " + val + ", Column: " + col + ", Row: " + row);
+
                     //Do thing
+                    //If its empty, we will want to do an insert of a new shift
+                    //If it exists, we will want to do an update of the shift. Maybe find a way to bind the shift ID to
+                    //it? Probably not worth trying and I'll just select by shift date. This will all be handled in the
+                    //Shift edit controller obviously but it doesn't exist yet.
                 }
             }
         });
