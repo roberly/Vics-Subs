@@ -12,6 +12,7 @@ public class Schedule
     private final StringProperty thursday;
     private final StringProperty friday;
     private final StringProperty saturday;
+    private final StringProperty employee;
 
     public Schedule(String monday, String tuesday, String wednesday, String thursday, String friday, String saturday, String sunday)
     {
@@ -22,6 +23,20 @@ public class Schedule
         this.thursday = new SimpleStringProperty(thursday);
         this.friday = new SimpleStringProperty(friday);
         this.saturday = new SimpleStringProperty(saturday);
+        this.employee = null;
+    }
+
+    //For admin schedule that includes name
+    public Schedule(String employeeName, String monday, String tuesday, String wednesday, String thursday, String friday, String saturday, String sunday)
+    {
+        this.sunday = new SimpleStringProperty(sunday);
+        this.monday = new SimpleStringProperty(monday);
+        this.tuesday = new SimpleStringProperty(tuesday);
+        this.wednesday = new SimpleStringProperty(wednesday);
+        this.thursday = new SimpleStringProperty(thursday);
+        this.friday = new SimpleStringProperty(friday);
+        this.saturday = new SimpleStringProperty(saturday);
+        this.employee = new SimpleStringProperty(employeeName);
     }
 
     public String getSunday() {
@@ -108,6 +123,16 @@ public class Schedule
         this.saturday.set(saturday);
     }
 
+    public String getEmployee() {
+        return employee.get();
+    }
 
+    public StringProperty employeeProperty() {
+        return employee;
+    }
+
+    public void setEmployee(String employee) {
+        this.employee.set(employee);
+    }
 
 }
