@@ -3,10 +3,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="910.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.ModifyScheduleController">
+<AnchorPane prefHeight="400.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.ModifyScheduleController">
     <children>
         <TableView fx:id="scheduleTable" layoutX="14.0" layoutY="14.0" prefHeight="300.0" prefWidth="600.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
             <columns>
+            <TableColumn fx:id="employeeCol" prefWidth="130.0" resizable="false" text="Employee" />
                 <TableColumn fx:id="mondayCol" prefWidth="130.0" resizable="false" text="Monday" />
                 <TableColumn fx:id="tuesdayCol" prefWidth="130.0" resizable="false" text="Tuesday" />
                 <TableColumn fx:id="wednesdayCol" prefWidth="130.0" resizable="false" text="Wednesday" />
