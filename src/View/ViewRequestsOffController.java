@@ -16,6 +16,7 @@ import javafx.util.Callback;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ViewRequestsOffController {
 
@@ -105,12 +106,27 @@ public class ViewRequestsOffController {
     }
 
     @FXML
-    public void deny(){
+    public void deny() throws SQLException {
+        DBConnection database = new DBConnection();
+        Connection connection = database.getConnection();
+        Statement statement = connection.createStatement();
+
+        String deleteRow = "DELETE FROM RequestedTimeOff WHERE Employee_ID = '" + employeeTextField.getText()
+                + "' AND StartDate = '" + startDateTextField.getText() + "' AND EndDate = '"
+                + endDateTextField.getText() + "';";
+        int resultSet = statement.executeUpdate(deleteRow);
         removeRowFromTable();
     }
 
     @FXML
-    public void approve(){
+    public void approve() throws SQLException {
+        DBConnection database = new DBConnection();
+        Connection connection = database.getConnection();
+        Statement statement = connection.createStatement();
+
+        String updateeRow = "UPDATE RequestedTimeOff SET Approval = '1' WHERE Employee_ID = '" + employeeTextField.getText()
+                + "' AND StartDate = '" + startDateTextField.getText() + "' AND EndDate = '" + endDateTextField.getText() + "';";
+        int resultSet = statement.executeUpdate(updateeRow);
 
     }
 
