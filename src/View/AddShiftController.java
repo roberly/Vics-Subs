@@ -29,6 +29,20 @@ public class AddShiftController
     Button btnok;
     @FXML
     Button btncancel;
+    @FXML
+    CheckBox LunchStart;
+    @FXML
+    CheckBox DinnerStart;
+    @FXML
+    CheckBox LunchEnd;
+    @FXML
+    CheckBox WkDyClose;
+    @FXML
+    CheckBox WkEdClose;
+
+
+
+
 
     private String ShiftDate = "";
     private int EmployeeID = 0;
