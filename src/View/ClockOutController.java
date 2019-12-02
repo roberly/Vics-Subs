@@ -92,7 +92,6 @@ public class ClockOutController {
         Statement statement = connection.createStatement();
 
         String str = "SELECT * FROM TimePunches WHERE Employee_ID = '" + employeeID + "' AND CurrentDate = '"+currentDate+"';";
-        System.out.println(str);
         ResultSet resultSet = statement.executeQuery(str);
 
         if(resultSet.first() == false)

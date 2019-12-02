@@ -38,6 +38,9 @@ public class ViewRequestsOffController {
     TableView requestsOffTableView;
 
     @FXML
+    TextField employeeIdTextField;
+
+    @FXML
     TextField employeeTextField;
 
     @FXML
@@ -59,9 +62,7 @@ public class ViewRequestsOffController {
         Connection connection = dbConnection.getConnection();
         ObservableList<ObservableList> requestOffInfo = FXCollections.observableArrayList();
         String sqlData = "SELECT Employee_ID, StartDate, EndDate from RequestedTimeOff";
-        System.out.println(sqlData);
         ResultSet resultSet = connection.createStatement().executeQuery(sqlData);
-        System.out.println(resultSet);
 
         for (int i = 0; i<resultSet.getMetaData().getColumnCount(); i++){
             final int j = i;
@@ -92,11 +93,17 @@ public class ViewRequestsOffController {
         {
             Object selectedItems = requestsOffTableView.getSelectionModel().getSelectedItems().get(0);
             String employeeId = selectedItems.toString().split(",")[0].substring(1);
-            employeeTextField.setText(employeeId);
+            employeeIdTextField.setText(employeeId);
             String startDate = selectedItems.toString().split(",")[1].substring(1);
             startDateTextField.setText(startDate);
             String endDate = selectedItems.toString().split(",")[2].substring(1);
             endDateTextField.setText(endDate.substring(0,endDate.length()-1));
+            try {
+                String employeeName = getNameFromId(Integer.valueOf(employeeId));
+                employeeTextField.setText(employeeName);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         });
     }
 
@@ -111,7 +118,7 @@ public class ViewRequestsOffController {
         Connection connection = database.getConnection();
         Statement statement = connection.createStatement();
 
-        String deleteRow = "DELETE FROM RequestedTimeOff WHERE Employee_ID = '" + employeeTextField.getText()
+        String deleteRow = "DELETE FROM RequestedTimeOff WHERE Employee_ID = '" + employeeIdTextField.getText()
                 + "' AND StartDate = '" + startDateTextField.getText() + "' AND EndDate = '"
                 + endDateTextField.getText() + "';";
         int resultSet = statement.executeUpdate(deleteRow);
@@ -124,10 +131,24 @@ public class ViewRequestsOffController {
         Connection connection = database.getConnection();
         Statement statement = connection.createStatement();
 
-        String updateeRow = "UPDATE RequestedTimeOff SET Approval = '1' WHERE Employee_ID = '" + employeeTextField.getText()
+        String updateeRow = "UPDATE RequestedTimeOff SET Approval = '1' WHERE Employee_ID = '" + employeeIdTextField.getText()
                 + "' AND StartDate = '" + startDateTextField.getText() + "' AND EndDate = '" + endDateTextField.getText() + "';";
         int resultSet = statement.executeUpdate(updateeRow);
 
+    }
+
+    private String getNameFromId(int id) throws SQLException {
+        DBConnection database = new DBConnection();
+        Connection connection = database.getConnection();
+        Statement statement = connection.createStatement();
+
+        String sql = "SELECT FirstName, LastName FROM Employee WHERE Employee_ID = " + id + ";";
+        ResultSet resultSet = statement.executeQuery(sql);
+        resultSet.next();
+        String firstName = resultSet.getString(1);
+        String lastName = resultSet.getString(2);
+        String employeeFirstAndLast = firstName + " " + lastName;
+        return employeeFirstAndLast;
     }
 
 }

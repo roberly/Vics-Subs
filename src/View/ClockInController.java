@@ -50,8 +50,7 @@ public class ClockInController
             String currentTime = getCurrentTime();
             String currentDate = getCurrentDate();
 
-            String str = "INSERT INTO TimePunches VALUES (" + employeeID + ", '" + currentTime + "', " +
-                    "NULL, '" + currentDate + "')";
+            String str = "INSERT INTO TimePunches ( Employee_ID, ClockInTime, CurrentDate) Values (" + employeeID + ", '" + currentTime + "', '" + currentDate + "')";
             statement.executeUpdate(str);
             timeLabel.setText(currentTime);
         }

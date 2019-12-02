@@ -54,7 +54,6 @@ public class InputHoursScreenController
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Hours inputted successfully");
             alert.setHeaderText("You have inputted hours for " + UsernameField.getText() + "successfully");
-            alert.setContentText("Good Job homie");
             alert.showAndWait();
         }
         else if(!doesThisUsernameExist())
@@ -76,18 +75,19 @@ public class InputHoursScreenController
     }
 
     @FXML
-    public void bringUpClockOut() throws SQLException {
-        if(doesTheClockInExist() && doesThisUsernameExist())
+    public void bringUpClockOut() throws SQLException
+    {
+        boolean doesThisClockInExist = doesTheClockInExist();
+        if(doesThisClockInExist && doesThisUsernameExist())
         {
             String inputClockOut = "update TimePunches set ClockOutTime = '" + time + "' where Employee_ID =" + getEmployeeID() + " and CurrentDate = '" + date + "'";
             statement.executeUpdate(inputClockOut);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Clock Out successful");
             alert.setHeaderText("You have clocked out " + username +" on " + date + " successfully");
-            alert.setContentText("Good Job homie");
             alert.showAndWait();
         }
-        else if(!doesTheClockInExist())
+        else if(!doesThisClockInExist)
         {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -106,21 +106,30 @@ public class InputHoursScreenController
     }
 
     @FXML
-    public void bringUpDeleteHours() throws SQLException {
-        if(!doTheseHoursExist() && doesThisUsernameExist())
+    public void bringUpDeleteHours() throws SQLException
+    {
+        boolean doTheHoursExist = doTheseHoursExist();
+        if(doTheHoursExist && doesThisUsernameExist())
         {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Hours deleted successfully");
             alert.setHeaderText("You have deleted hours for " + UsernameField.getText() + "successfully");
-            alert.setContentText("Good Job homie");
             alert.showAndWait();
         }
-        else
+        else if(!doTheHoursExist)
         {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Hours or username do not exist");
             alert.setHeaderText("Invalid Hours or username");
             alert.setContentText("Please type in a correct username or hours on the correct date");
+            alert.showAndWait();
+        }
+        else
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid Username");
+            alert.setHeaderText("Invalid Username");
+            alert.setContentText("Please type in a correct username");
             alert.showAndWait();
         }
     }

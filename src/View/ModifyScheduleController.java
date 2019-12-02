@@ -69,6 +69,8 @@ public class ModifyScheduleController
 
     public void showSchedule() throws SQLException
     {
+        scheduleTable.getItems().clear();
+
         employeeCol.setCellValueFactory(new PropertyValueFactory<Schedule, String>("employee"));
         sundayCol.setCellValueFactory(new PropertyValueFactory<Schedule,String>("sunday"));
         mondayCol.setCellValueFactory(new PropertyValueFactory<Schedule,String>("monday"));
@@ -101,9 +103,9 @@ public class ModifyScheduleController
                     {
                         try
                         {
-                            addShift(col, EmployeeIDs.get(row));
+                            addShift(col-1, EmployeeIDs.get(row));
                         }
-                        catch (IOException e)
+                        catch (IOException | SQLException e)
                         {
                             e.printStackTrace();
                         }
@@ -112,47 +114,46 @@ public class ModifyScheduleController
                     {
                         try
                         {
-                            changeShift(val, col, EmployeeIDs.get(row));
+                            changeShift(col-1, EmployeeIDs.get(row));
                         }
-                        catch (IOException e)
+                        catch (IOException | SQLException e)
                         {
                             e.printStackTrace();
                         }
                     }
-                    //Do thing
-                    //If its empty, we will want to do an insert of a new shift
-                    //If it exists, we will want to do an update of the shift. Maybe find a way to bind the shift ID to
-                    //it? Probably not worth trying and I'll just select by shift date. This will all be handled in the
-                    //Shift edit controller obviously but it doesn't exist yet.
                 }
             }
         });
     }
 
-    private void addShift(int weekColumn, int employeeID) throws IOException
+    private void addShift(int weekColumn, int employeeID) throws IOException, SQLException
     {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddShift.fxml"));
         Parent root1 = (Parent) fxmlLoader.load();
         AddShiftController controller = fxmlLoader.getController();
-        controller.onInit(week[weekColumn], employeeID);
+        controller.onInit(week[weekColumn], employeeID, this);
         Stage stage = new Stage();
         stage.setTitle("Add New Shift");
         stage.setScene(new Scene(root1));
         stage.show();
     }
 
-    private void changeShift(String currentShift, int weekColumn, int employeeID) throws IOException
+    private void changeShift(int weekColumn, int employeeID) throws IOException, SQLException
     {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("EditShift.fxml"));
         Parent root1 = (Parent) fxmlLoader.load();
+        EditShiftController controller = fxmlLoader.getController();
+        controller.onInit(week[weekColumn], employeeID, this);
         Stage stage = new Stage();
-        stage.setTitle("Alter Shift");
+        stage.setTitle("Change Shift");
         stage.setScene(new Scene(root1));
         stage.show();
     }
 
     private ObservableList<Schedule> getDataFromScheduleAndAddToObservableList(){
         ObservableList<Schedule> scheduleData = FXCollections.observableArrayList();
+        EmployeeIDs.clear();
+        EmployeeNames.clear();
         try {
             String sundayShift = "";
             String mondayShift = "";
