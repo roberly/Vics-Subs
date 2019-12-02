@@ -54,7 +54,6 @@ public class InputHoursScreenController
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Hours inputted successfully");
             alert.setHeaderText("You have inputted hours for " + UsernameField.getText() + "successfully");
-            alert.setContentText("Good Job homie");
             alert.showAndWait();
         }
         else if(!doesThisUsernameExist())
@@ -86,7 +85,6 @@ public class InputHoursScreenController
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Clock Out successful");
             alert.setHeaderText("You have clocked out " + username +" on " + date + " successfully");
-            alert.setContentText("Good Job homie");
             alert.showAndWait();
         }
         else if(!doesThisClockInExist)
@@ -116,7 +114,6 @@ public class InputHoursScreenController
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Hours deleted successfully");
             alert.setHeaderText("You have deleted hours for " + UsernameField.getText() + "successfully");
-            alert.setContentText("Good Job homie");
             alert.showAndWait();
         }
         else if(!doTheHoursExist)
