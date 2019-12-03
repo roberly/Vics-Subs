@@ -122,31 +122,26 @@ public class EditShiftController
         Stage stage = (Stage) btncancel.getScene().getWindow();
         stage.close();
     }
+
     @FXML
     private void onDeleteShift() throws SQLException
     {
         DBConnection database = new DBConnection();
         Connection connection = database.getConnection();
         Statement statement = connection.createStatement();
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this shift?", ButtonType.YES, ButtonType.CANCEL);
         alert.setTitle("Delete Shift Confirmation");
         alert.setHeaderText("Please confirm shift deletion");
-        alert.setContentText("Are you sure you want to delete this shift?");
+        alert.showAndWait();
 
-        ButtonType buttonTypeYes = new ButtonType("Yes");
-        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeCancel);
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == buttonTypeYes)
+        if (alert.getResult() == ButtonType.YES)
         {
-            String deleteShift = "Delete from Schedule where Employee_ID = " + EmployeeID + " and ShiftDate = '" + ShiftDate + "'";
+            String deleteShift = "DELETE FROM Schedule WHERE Employee_ID = " + EmployeeID + " AND ShiftDate = '" + ShiftDate + "'";
             statement.executeUpdate(deleteShift);
             Controller.showSchedule();
             Stage stage = (Stage) btndelete.getScene().getWindow();
             stage.close();
         }
-        else { }
     }
     @FXML
     private void onLunchStart()

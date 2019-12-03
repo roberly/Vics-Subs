@@ -6,10 +6,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -17,6 +14,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ViewRequestsOffController {
 
@@ -126,15 +127,44 @@ public class ViewRequestsOffController {
     }
 
     @FXML
-    public void approve() throws SQLException {
+    public void approve() throws SQLException, ParseException {
         DBConnection database = new DBConnection();
         Connection connection = database.getConnection();
         Statement statement = connection.createStatement();
+        String employeeID = employeeIdTextField.getText();
+        String startDate = startDateTextField.getText();
+        String endDate = endDateTextField.getText();
 
-        String updateeRow = "UPDATE RequestedTimeOff SET Approval = '1' WHERE Employee_ID = '" + employeeIdTextField.getText()
-                + "' AND StartDate = '" + startDateTextField.getText() + "' AND EndDate = '" + endDateTextField.getText() + "';";
-        int resultSet = statement.executeUpdate(updateeRow);
+        String updateRow = "UPDATE RequestedTimeOff SET Approval = '1' WHERE Employee_ID = '" + employeeID
+                + "' AND StartDate = '" + startDate + "' AND EndDate = '" + endDate + "';";
+        statement.executeUpdate(updateRow);
 
+        String firstDayInsert = "INSERT INTO Schedule (Employee_ID, ShiftDate, ShiftStartTime, ShiftEndTime) VALUES ("
+                + employeeID + ", '" + startDate + "', 'REQUEST OFF', '')";
+        System.out.println(firstDayInsert);
+        statement.executeUpdate(firstDayInsert);
+
+        if(!startDate.equals(endDate))
+        {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            c.setTime(sdf.parse(startDate));
+            while(!sdf.format(c.getTime()).equals(endDate))
+            {
+                c.add(Calendar.DAY_OF_MONTH, 1);
+                String date = sdf.format(c.getTime());
+
+                String nextDayInsert = "INSERT INTO Schedule (Employee_ID, ShiftDate, ShiftStartTime, ShiftEndTime) VALUES ("
+                        + employeeID + ", '" + date + "', 'REQUEST OFF', '')";
+                System.out.println(nextDayInsert);
+                statement.executeUpdate(nextDayInsert);
+            }
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Request Approved");
+        alert.setHeaderText("Request Approved");
+        alert.showAndWait();
     }
 
     private String getNameFromId(int id) throws SQLException {

@@ -218,34 +218,41 @@ public class ModifyScheduleController
                     String resultDate = resultSet.getString("ShiftDate");
                     String ShiftStartTime = resultSet.getString("ShiftStartTime");
                     String ShiftEndTime = resultSet.getString("ShiftEndTime");
+                    String ShiftTime = "";
                     int startFirstColon = ShiftStartTime.indexOf(":");
                     int endFirstColon = ShiftEndTime.indexOf(":");
                     int startLength = ShiftStartTime.length();
                     int endLength = ShiftEndTime.length();
 
-                    ShiftStartTime = ShiftStartTime.substring(0, startFirstColon + 3) + ShiftStartTime.substring(startLength - 3, startLength);
-                    ShiftEndTime = ShiftEndTime.substring(0, endFirstColon + 3) + ShiftEndTime.substring(endLength - 3, endLength);
+                    if(!ShiftStartTime.equals("REQUEST OFF"))
+                    {
+                        ShiftStartTime = ShiftStartTime.substring(0, startFirstColon + 3) + ShiftStartTime.substring(startLength - 3, startLength);
+                        ShiftEndTime = ShiftEndTime.substring(0, endFirstColon + 3) + ShiftEndTime.substring(endLength - 3, endLength);
+                        ShiftTime = ShiftStartTime + " - " + ShiftEndTime;
+                    }
+                    else
+                        ShiftTime = ShiftStartTime;
 
                     if (resultDate.equals(week[0]))
-                        mondayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        mondayShift = ShiftTime;
 
                     else if (resultDate.equals(week[1]))
-                        tuesdayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        tuesdayShift = ShiftTime;
 
                     else if (resultDate.equals(week[2]))
-                        wednesdayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        wednesdayShift = ShiftTime;
 
                     else if (resultDate.equals(week[3]))
-                        thursdayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        thursdayShift = ShiftTime;
 
                     else if (resultDate.equals(week[4]))
-                        fridayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        fridayShift = ShiftTime;
 
                     else if (resultDate.equals(week[5]))
-                        saturdayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        saturdayShift = ShiftTime;
 
                     else if (resultDate.equals(week[6]))
-                        sundayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        sundayShift = ShiftTime;
                 }
                 scheduleData.add(new Schedule(employee, mondayShift, tuesdayShift, wednesdayShift, thursdayShift, fridayShift, saturdayShift, sundayShift));
             }
