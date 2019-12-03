@@ -9,17 +9,21 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Calendar;
 
 import Main.Schedule;
 
@@ -31,9 +35,14 @@ public class ScheduleController
     private ResultSet resultSet;
 
     private int employeeID;
+    String week[] = new String[7];
 
     @FXML
     Button doneButton;
+    @FXML
+    Button backWeekBtn;
+    @FXML
+    Button nextWeekBtn;
     @FXML
     Label weekLabel;
     @FXML
@@ -61,6 +70,8 @@ public class ScheduleController
 
     public void showSchedule() throws SQLException
     {
+        scheduleTable.getItems().clear();
+
         sundayCol.setCellValueFactory(new PropertyValueFactory<Schedule,String>("sunday"));
         mondayCol.setCellValueFactory(new PropertyValueFactory<Schedule,String>("monday"));
         tuesdayCol.setCellValueFactory(new PropertyValueFactory<Schedule,String>("tuesday"));
@@ -103,34 +114,25 @@ public class ScheduleController
                 ShiftEndTime = ShiftEndTime.substring(0,endFirstColon+3) + ShiftEndTime.substring(endLength-3,endLength);
 
                 if(resultDate.equals(week[0]))
-                {
                     mondayShift = ShiftStartTime + " - " + ShiftEndTime;
-                }
 
                 else if(resultDate.equals(week[1]))
-                {
                     tuesdayShift = ShiftStartTime + " - " + ShiftEndTime;
-                }
+
                 else if(resultDate.equals(week[2]))
-                {
                     wednesdayShift = ShiftStartTime + " - " + ShiftEndTime;
-                }
+
                 else if(resultDate.equals(week[3]))
-                {
                     thursdayShift = ShiftStartTime + " - " + ShiftEndTime;
-                }
+
                 else if(resultDate.equals(week[4]))
-                {
                     fridayShift = ShiftStartTime + " - " + ShiftEndTime;
-                }
+
                 else if(resultDate.equals(week[5]))
-                {
                     saturdayShift = ShiftStartTime + " - " + ShiftEndTime;
-                }
-                else
-                {
+
+                else if(resultDate.equals(week[6]))
                     sundayShift = ShiftStartTime + " - " + ShiftEndTime;
-                }
             }
             scheduleData.add(new Schedule(mondayShift, tuesdayShift, wednesdayShift, thursdayShift, fridayShift, saturdayShift, sundayShift));
             connection.close();
@@ -147,10 +149,14 @@ public class ScheduleController
 
     public String[] getWeek()
     {
+        if(week[0] != null)
+        {
+            return week;
+        }
+
         LocalDate mostRecentMonday =
                 LocalDate.now(ZoneId.of("America/Montreal"))
                         .with(TemporalAdjusters.previous(DayOfWeek.MONDAY));
-        String week[] = new String[7];
         LocalDate current = mostRecentMonday;
         DateTimeFormatter mmddyyyy = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         for (int i = 0; i < 7; i++)
@@ -163,6 +169,38 @@ public class ScheduleController
         }
         weekLabel.setText("Week of " + week[0] + " - " + week[6]);
         return week;
+    }
+
+    @FXML
+    public void goToLastWeek() throws ParseException, SQLException
+    {
+        for(int i = 0; i < 7; i++)
+        {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            c.setTime(sdf.parse(week[i]));
+            c.add(Calendar.DAY_OF_MONTH, -7);
+            week[i] = sdf.format(c.getTime());
+            weekLabel.setText("Week of " + week[0] + " - " + week[6]);
+        }
+
+        showSchedule();
+    }
+
+    @FXML
+    public void goToNextWeek() throws ParseException, SQLException
+    {
+        for(int i = 0; i < 7; i++)
+        {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            c.setTime(sdf.parse(week[i]));
+            c.add(Calendar.DAY_OF_MONTH, 7);
+            week[i] = sdf.format(c.getTime());
+            weekLabel.setText("Week of " + week[0] + " - " + week[6]);
+        }
+
+        showSchedule();
     }
 
     @FXML

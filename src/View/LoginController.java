@@ -2,6 +2,7 @@ package View;
 
 import Database.DBConnection;
 import Main.Employee;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,13 +11,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
+import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class LoginController
 {
@@ -28,6 +28,29 @@ public class LoginController
     private PasswordField pfpassword;
 
     private Employee employee;
+
+    public void initialize()
+    {
+        tfusername.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.ENTER){
+                try {
+                    loginButtonClicked();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        pfpassword.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.ENTER){
+                try {
+                    loginButtonClicked();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
     @FXML
     public void loginButtonClicked() throws IOException
@@ -87,21 +110,13 @@ public class LoginController
 
         DBConnection database = new DBConnection();
         Connection connection = database.getConnection();
-        Statement statement = connection.createStatement();
-        String usernameQueryReturnID = "";
 
-        String str = "select Employee_ID from employee where username = '" + userName + "';";
+        PreparedStatement stmt = connection.prepareStatement("select * from employee where username = ? AND password = ?");
 
-        System.out.println(str);
+        stmt.setString(1, userName);
+        stmt.setString(2, password);
 
-        ResultSet usernameQuery = statement.executeQuery(str);
-        if(usernameQuery.next())
-            usernameQueryReturnID = usernameQuery.getString("Employee_ID");
-
-        String str2 = "select * from Employee where Employee_ID = " + usernameQueryReturnID + " AND password = '" + password + "';";
-        System.out.println(str2);
-
-        ResultSet resultSet = statement.executeQuery(str2);
+        ResultSet resultSet = stmt.executeQuery();
 
         while (resultSet.next())
         {
