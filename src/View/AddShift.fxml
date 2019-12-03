@@ -6,23 +6,28 @@
 
 <AnchorPane prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.AddShiftController">
    <children>
-      <Label fx:id="lblemployee" alignment="CENTER" contentDisplay="CENTER" layoutX="-2.0" layoutY="55.0" prefHeight="17.0" prefWidth="400.0" text="Label" textAlignment="CENTER">
+      <Label fx:id="lblemployee" alignment="CENTER" contentDisplay="CENTER" layoutX="-2.0" layoutY="55.0" prefHeight="17.0" prefWidth="400.0" text="New Shift" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Label>
-      <Button fx:id="btnok" layoutX="126.0" layoutY="204.0" mnemonicParsing="false" onAction="#onAddShift" text="Add Shift" />
-      <Button fx:id="btncancel" layoutX="223.0" layoutY="204.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel" />
-      <Label layoutX="82.0" layoutY="113.0" text="Shift Start Time">
+      <Button fx:id="btnok" layoutX="126.0" layoutY="244.0" mnemonicParsing="false" onAction="#onAddShift" text="Add Shift" />
+      <Button fx:id="btncancel" layoutX="223.0" layoutY="244.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel" />
+      <Label layoutX="59.0" layoutY="113.0" text="Shift Start Time">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Label layoutX="88.0" layoutY="154.0" text="Shift End Time">
+      <Label layoutX="62.0" layoutY="184.0" text="Shift End Time">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <ChoiceBox fx:id="cbstarttime" layoutX="174.0" layoutY="109.0" prefWidth="150.0" />
-      <ChoiceBox fx:id="cbendtime" layoutX="174.0" layoutY="150.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="cbstarttime" layoutX="159.0" layoutY="109.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="cbendtime" layoutX="159.0" layoutY="180.0" prefWidth="150.0" />
+      <CheckBox fx:id="LunchStart" layoutX="105.0" layoutY="142.0" mnemonicParsing="false" text="Lunch Shift Start" />
+      <CheckBox fx:id="WkDyClose" layoutX="170.0" layoutY="214.0" mnemonicParsing="false" text="Week Day Close" />
+      <CheckBox fx:id="WkEdClose" layoutX="287.0" layoutY="214.0" mnemonicParsing="false" text="Weekend Close" />
+      <CheckBox fx:id="DinnerStart" layoutX="249.0" layoutY="142.0" mnemonicParsing="false" text="Dinner Shift Start" />
+      <CheckBox fx:id="LunchEnd" layoutX="62.0" layoutY="214.0" mnemonicParsing="false" text="Lunch Shift End" />
    </children>
 </AnchorPane>
