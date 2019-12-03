@@ -17,13 +17,16 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public class ViewRequestsOffController {
 
     public void initialize() throws SQLException {
         fillTable();
-        fillOutSelectedData();
+        try {
+            fillOutSelectedData();
+        } catch (Exception e) {
+
+        }
     }
 
     @FXML
@@ -70,11 +73,11 @@ public class ViewRequestsOffController {
             TableColumn column = new TableColumn(resultSet.getMetaData().getColumnName(i+1));
             column.setCellValueFactory
                     (new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
-                    return new SimpleStringProperty(param.getValue().get(j).toString());
-                }
-            });
+                        @Override
+                        public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
+                            return new SimpleStringProperty(param.getValue().get(j).toString());
+                        }
+                    });
 
             requestsOffTableView.getColumns().addAll(column);
         }
@@ -89,7 +92,7 @@ public class ViewRequestsOffController {
         requestsOffTableView.setItems(requestOffInfo);
     }
 
-    public void fillOutSelectedData(){
+    public void fillOutSelectedData() {
         requestsOffTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
         {
             Object selectedItems = requestsOffTableView.getSelectionModel().getSelectedItems().get(0);
@@ -98,7 +101,7 @@ public class ViewRequestsOffController {
             String startDate = selectedItems.toString().split(",")[1].substring(1);
             startDateTextField.setText(startDate);
             String endDate = selectedItems.toString().split(",")[2].substring(1);
-            endDateTextField.setText(endDate.substring(0,endDate.length()-1));
+            endDateTextField.setText(endDate.substring(0, endDate.length() - 1));
             try {
                 String employeeName = getNameFromId(Integer.valueOf(employeeId));
                 employeeTextField.setText(employeeName);
@@ -124,6 +127,16 @@ public class ViewRequestsOffController {
                 + endDateTextField.getText() + "';";
         int resultSet = statement.executeUpdate(deleteRow);
         removeRowFromTable();
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Request Denied");
+        alert.setHeaderText("Request Denied");
+        alert.showAndWait();
+
+        employeeTextField.setText("");
+        endDateTextField.setText("");
+        startDateTextField.setText("");
+        employeeIdTextField.setText("");
     }
 
     @FXML
@@ -156,6 +169,7 @@ public class ViewRequestsOffController {
 
                 String nextDayInsert = "INSERT INTO Schedule (Employee_ID, ShiftDate, ShiftStartTime, ShiftEndTime) VALUES ("
                         + employeeID + ", '" + date + "', 'REQUEST OFF', '')";
+
                 System.out.println(nextDayInsert);
                 statement.executeUpdate(nextDayInsert);
             }
@@ -165,6 +179,18 @@ public class ViewRequestsOffController {
         alert.setTitle("Request Approved");
         alert.setHeaderText("Request Approved");
         alert.showAndWait();
+
+        String deleteRow = "DELETE FROM RequestedTimeOff WHERE Employee_ID = '" + employeeIdTextField.getText()
+                + "' AND StartDate = '" + startDateTextField.getText() + "' AND EndDate = '"
+                + endDateTextField.getText() + "';";
+        statement.executeUpdate(deleteRow);
+
+        removeRowFromTable();
+
+        employeeTextField.setText("");
+        endDateTextField.setText("");
+        startDateTextField.setText("");
+        employeeIdTextField.setText("");
     }
 
     private String getNameFromId(int id) throws SQLException {
