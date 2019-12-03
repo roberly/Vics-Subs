@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Optional;
 
 public class EditShiftController
 {
@@ -29,6 +30,22 @@ public class EditShiftController
     Button btnok;
     @FXML
     Button btncancel;
+    @FXML
+    Button btndelete;
+    @FXML
+    RadioButton LunchStart;
+    @FXML
+    RadioButton DinnerStart;
+    @FXML
+    RadioButton LunchEnd;
+    @FXML
+    RadioButton WkDyClose;
+    @FXML
+    RadioButton WkEdClose;
+    @FXML
+    ToggleGroup Start;
+    @FXML
+    ToggleGroup End;
 
     private String ShiftDate = "";
     private int EmployeeID = 0;
@@ -104,5 +121,66 @@ public class EditShiftController
     {
         Stage stage = (Stage) btncancel.getScene().getWindow();
         stage.close();
+    }
+    @FXML
+    private void onDeleteShift() throws SQLException
+    {
+        DBConnection database = new DBConnection();
+        Connection connection = database.getConnection();
+        Statement statement = connection.createStatement();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Shift Confirmation");
+        alert.setHeaderText("Please confirm shift deletion");
+        alert.setContentText("Are you sure you want to delete this shift?");
+
+        ButtonType buttonTypeYes = new ButtonType("Yes");
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeCancel);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonTypeYes)
+        {
+            String deleteShift = "Delete from Schedule where Employee_ID = " + EmployeeID + " and ShiftDate = '" + ShiftDate + "'";
+            statement.executeUpdate(deleteShift);
+            Controller.showSchedule();
+            Stage stage = (Stage) btndelete.getScene().getWindow();
+            stage.close();
+        }
+        else
+        {
+
+        }
+
+
+
+    }
+    @FXML
+    private void onLunchStart()
+    {
+        cbstarttime.setValue("11:00:00 AM");
+    }
+
+    @FXML
+    private void onDinnerStart()
+    {
+        cbstarttime.setValue("3:00:00 PM");
+    }
+
+    @FXML
+    private void onLunchEnd()
+    {
+        cbendtime.setValue("3:00:00 PM");
+    }
+
+    @FXML
+    private void onWeekDayEnd()
+    {
+        cbendtime.setValue("8:00:00 PM");
+    }
+
+    @FXML
+    private void onWeekendEnd()
+    {
+        cbendtime.setValue("9:30:00 PM");
     }
 }
