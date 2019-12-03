@@ -2,6 +2,7 @@ package View;
 
 import Database.DBConnection;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -34,11 +35,10 @@ public class AddNewEmployeeController
     TextField UserField;
     @FXML
     Label Title;
-    /*private String Firstname = FirstField.getText().trim();
-    private String Lastname = LastField.getText();
-    private String username = UserField.getText();
-    private String password = PassField.getText();
-    private String Confirmpassword = ConfirmField.getText(); **/
+
+    private String firstname;
+    private String lastname;
+
 
 
     @FXML
@@ -73,7 +73,14 @@ public class AddNewEmployeeController
         String username = UserField.getText();
         String password = PassField.getText();
         String Confirmpassword = ConfirmField.getText();
-
+        if(!firstname.equals(""))
+        {
+            Firstname = firstname;
+        }
+        if(!lastname.equals(""))
+        {
+            Lastname = lastname;
+        }
 
         if(isNotEmployed()) {
             DBConnection database = new DBConnection();
@@ -101,8 +108,11 @@ public class AddNewEmployeeController
         else
         {
 
-
-            Title.setText("You are already employed! Please add a new user!");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Add User");
+            alert.setHeaderText("Valid name needed");
+            alert.setContentText("You are already employed!");
+            alert.showAndWait();
             UserField.clear();
             PassField.clear();
             FirstField.clear();
@@ -115,11 +125,24 @@ public class AddNewEmployeeController
     @FXML
     public void bringAdded() throws IOException
     {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddedUser.fxml"));
-        Parent root1 = (Parent) fxmlLoader.load();
-        Stage stage = new Stage();
-        stage.setTitle("They have been Added!");
-        stage.setScene(new Scene(root1));
-        stage.show();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Add Employee");
+        alert.setHeaderText("Thank You!");
+        alert.setContentText("You have added this employee");
+        alert.showAndWait();
+    }
+    public void onInit(String x, String y) throws SQLException {
+        firstname = x;
+        lastname = y;
+        FirstField.setText(firstname);
+        LastField.setText(lastname);
+        if(!isNotEmployed())
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Add User");
+            alert.setHeaderText("Valid name needed");
+            alert.setContentText("You are already employed!");
+            alert.showAndWait();
+        }
     }
 }
