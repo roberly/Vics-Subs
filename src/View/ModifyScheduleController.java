@@ -21,12 +21,16 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ModifyScheduleController
 {
@@ -37,6 +41,10 @@ public class ModifyScheduleController
 
     @FXML
     Button doneButton;
+    @FXML
+    Button backWeekBtn;
+    @FXML
+    Button nextWeekBtn;
     @FXML
     Label weekLabel;
     @FXML
@@ -236,6 +244,11 @@ public class ModifyScheduleController
 
     public String[] getWeek()
     {
+        if(week[0] != null)
+        {
+            return week;
+        }
+
         LocalDate mostRecentMonday =
                 LocalDate.now(ZoneId.of("America/Montreal"))
                         .with(TemporalAdjusters.previous(DayOfWeek.MONDAY));
@@ -251,6 +264,38 @@ public class ModifyScheduleController
         }
         weekLabel.setText("Week of " + week[0] + " - " + week[6]);
         return week;
+    }
+
+    @FXML
+    public void goToLastWeek() throws ParseException, SQLException
+    {
+        for(int i = 0; i < 7; i++)
+        {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            c.setTime(sdf.parse(week[i]));
+            c.add(Calendar.DAY_OF_MONTH, -7);
+            week[i] = sdf.format(c.getTime());
+            weekLabel.setText("Week of " + week[0] + " - " + week[6]);
+        }
+
+        showSchedule();
+    }
+
+    @FXML
+    public void goToNextWeek() throws ParseException, SQLException
+    {
+        for(int i = 0; i < 7; i++)
+        {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            c.setTime(sdf.parse(week[i]));
+            c.add(Calendar.DAY_OF_MONTH, 7);
+            week[i] = sdf.format(c.getTime());
+            weekLabel.setText("Week of " + week[0] + " - " + week[6]);
+        }
+
+        showSchedule();
     }
 
     @FXML

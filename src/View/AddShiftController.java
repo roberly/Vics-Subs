@@ -29,6 +29,20 @@ public class AddShiftController
     Button btnok;
     @FXML
     Button btncancel;
+    @FXML
+    RadioButton LunchStart;
+    @FXML
+    RadioButton DinnerStart;
+    @FXML
+    RadioButton LunchEnd;
+    @FXML
+    RadioButton WkDyClose;
+    @FXML
+    RadioButton WkEdClose;
+    @FXML
+    ToggleGroup Start;
+    @FXML
+    ToggleGroup End;
 
     private String ShiftDate = "";
     private int EmployeeID = 0;
@@ -106,14 +120,44 @@ public class AddShiftController
         String startTime = (String)cbstarttime.getValue();
         String endTime = (String)cbendtime.getValue();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-        Date start = sdf.parse(startTime.substring(0, startTime.length()-3));
-        Date end = sdf.parse(endTime.substring(0, endTime.length()-3));
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss a");
+        Date start = sdf.parse(startTime);
+        Date end = sdf.parse(endTime);
 
         if(end.before(start))
             return false;
         else
             return true;
 
+    }
+
+    @FXML
+    private void onLunchStart()
+    {
+        cbstarttime.setValue("11:00:00 AM");
+    }
+
+    @FXML
+    private void onDinnerStart()
+    {
+        cbstarttime.setValue("3:00:00 PM");
+    }
+
+    @FXML
+    private void onLunchEnd()
+    {
+        cbendtime.setValue("3:00:00 PM");
+    }
+
+    @FXML
+    private void onWeekDayEnd()
+    {
+        cbendtime.setValue("8:00:00 PM");
+    }
+
+    @FXML
+    private void onWeekendEnd()
+    {
+        cbendtime.setValue("9:30:00 PM");
     }
 }
