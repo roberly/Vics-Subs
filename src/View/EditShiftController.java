@@ -146,13 +146,7 @@ public class EditShiftController
             Stage stage = (Stage) btndelete.getScene().getWindow();
             stage.close();
         }
-        else
-        {
-
-        }
-
-
-
+        else { }
     }
     @FXML
     private void onLunchStart()
