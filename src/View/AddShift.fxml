@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.AddShiftController">
+<AnchorPane prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.AddShiftController">
    <children>
-      <Label fx:id="lblemployee" alignment="CENTER" contentDisplay="CENTER" layoutY="43.0" prefHeight="17.0" prefWidth="400.0" text="New Shift" textAlignment="CENTER">
+      <Label fx:id="lblemployee" alignment="CENTER" contentDisplay="CENTER" layoutY="42.0" prefHeight="17.0" prefWidth="400.0" text="New Shift" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="14.0" />
          </font></Label>
