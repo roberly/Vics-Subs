@@ -65,35 +65,6 @@ public class ViewAllHoursController {
         getHoursWorked();
     }
 
-    @FXML
-    public void handleCloseButtonAction() throws SQLException, ParseException {
-        Stage stage = (Stage)this.doneButton.getScene().getWindow();
-        stage.close();
-    }
-
-    public String[] getWeek() {
-        if(week[0] != null)
-        {
-            return week;
-        }
-
-        LocalDate mostRecentMonday = LocalDate.now( ZoneId.of( "America/Montreal" ) ).with( TemporalAdjusters.previous( DayOfWeek.MONDAY ) ) ;
-        String[] week = new String[7];
-        DateTimeFormatter mmddyyyy = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        LocalDate current = mostRecentMonday;
-
-        for(int i = 0; i < 7; ++i) {
-            if (i != 0) {
-                current = current.plusDays(1L);
-            }
-
-            week[i] = current.format(mmddyyyy);
-        }
-
-        this.weekLabel.setText(week[0] + " - " + week[6]);
-        return week;
-    }
-
     public void getHoursWorked() throws SQLException, ParseException {
         hoursWorkedTable.getItems().clear();
         connection = database.getConnection();
@@ -133,7 +104,6 @@ public class ViewAllHoursController {
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
 
         for(int j = 0; j < EmployeeIDs.size(); j++) {
-            System.out.println(j);
             employee = EmployeeNames.get(j);
             mondayShift = "";
             tuesdayShift = "";
@@ -144,15 +114,12 @@ public class ViewAllHoursController {
             sundayShift = "";
 
             for (int i = 0; i < 7; ++i) {
-                System.out.println(i);
                 String current = week[i];
                 String str = "SELECT * FROM TimePunches WHERE Employee_ID = '" + EmployeeIDs.get(j) + "' AND CurrentDate = '" + current + "';";
                 ResultSet resultSet = statement.executeQuery(str);
                 if (resultSet.first()) {
                     String cIn = hhmmaa.format(df.parse(resultSet.getString("ClockInTime")));
                     String cOut = hhmmaa.format(df.parse(resultSet.getString("ClockOutTime")));
-                    System.out.println(cIn);
-                    System.out.println(cOut);
                     Calendar clockInTime = Calendar.getInstance();
                     Calendar clockOutTime = Calendar.getInstance();
                     clockInTime.setTime(sdf.parse(cIn));
@@ -185,6 +152,30 @@ public class ViewAllHoursController {
         statement.close();
     }
 
+    public String[] getWeek()
+    {
+        if(week[0] != null)
+        {
+            return week;
+        }
+
+        LocalDate mostRecentMonday =
+                LocalDate.now(ZoneId.of("America/Montreal"))
+                        .with(TemporalAdjusters.previous(DayOfWeek.MONDAY));
+        LocalDate current = mostRecentMonday;
+        DateTimeFormatter mmddyyyy = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        for (int i = 0; i < 7; i++)
+        {
+            if (i != 0)
+            {
+                current = current.plusDays(1);
+            }
+            week[i] = current.format(mmddyyyy);
+        }
+        weekLabel.setText("Week of " + week[0] + " - " + week[6]);
+        return week;
+    }
+
     public void goToLastWeek() throws ParseException, SQLException
     {
         for(int i = 0; i < 7; i++)
@@ -214,5 +205,11 @@ public class ViewAllHoursController {
         }
 
         getHoursWorked();
+    }
+
+    @FXML
+    public void handleCloseButtonAction() throws SQLException, ParseException {
+        Stage stage = (Stage)this.doneButton.getScene().getWindow();
+        stage.close();
     }
 }
