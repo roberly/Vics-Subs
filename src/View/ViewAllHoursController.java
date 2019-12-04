@@ -2,6 +2,9 @@ package View;
 
 import Database.DBConnection;
 import Main.Schedule;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -44,6 +47,8 @@ public class ViewAllHoursController {
     @FXML
     TableColumn<Schedule, String> employeeCol;
     @FXML
+    TableColumn<Schedule, String> hoursWorkedCol;
+    @FXML
     TableColumn<Schedule, String> mondayCol;
     @FXML
     TableColumn<Schedule, String> tuesdayCol;
@@ -71,6 +76,7 @@ public class ViewAllHoursController {
         Statement statement = connection.createStatement();
 
         this.employeeCol.setCellValueFactory(new PropertyValueFactory<Schedule, String>("employee"));
+        this.hoursWorkedCol.setCellValueFactory(new PropertyValueFactory<Schedule, String>("hoursWorked"));
         this.mondayCol.setCellValueFactory(new PropertyValueFactory("monday"));
         this.tuesdayCol.setCellValueFactory(new PropertyValueFactory("tuesday"));
         this.wednesdayCol.setCellValueFactory(new PropertyValueFactory("wednesday"));
@@ -112,6 +118,7 @@ public class ViewAllHoursController {
             fridayShift = "";
             saturdayShift = "";
             sundayShift = "";
+            long hoursWorked = 0L;
 
             for (int i = 0; i < 7; ++i) {
                 String current = week[i];
@@ -125,6 +132,7 @@ public class ViewAllHoursController {
                     clockInTime.setTime(sdf.parse(cIn));
                     clockOutTime.setTime(sdf.parse(cOut));
                     String day = cIn + " - " + cOut;
+                    hoursWorked += clockOutTime.getTimeInMillis() - clockInTime.getTimeInMillis();
 
                     if (i == 0) {
                         mondayShift = day;
@@ -144,12 +152,25 @@ public class ViewAllHoursController {
                 }
             }
 
-            hoursWorkedData.add(new Schedule(employee, mondayShift, tuesdayShift, wednesdayShift, thursdayShift, fridayShift, saturdayShift, sundayShift));
+            long totalSecs = hoursWorked / 1000L;
+            long hours = totalSecs / 3600L;
+            long mins = totalSecs / 60L % 60L;
+            double decimal = round(((double) mins/60L), 2);
+            String hrs = "" + ((double) hours + decimal);
+            hoursWorkedData.add(new Schedule(employee, hrs, mondayShift, tuesdayShift, wednesdayShift, thursdayShift, fridayShift, saturdayShift, sundayShift));
         }
 
         this.hoursWorkedTable.getItems().addAll(hoursWorkedData);
         connection.close();
         statement.close();
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
     public String[] getWeek()

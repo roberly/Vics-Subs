@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.ViewAllHoursController">
+<AnchorPane prefHeight="400.0" prefWidth="1170.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.ViewAllHoursController">
     <children>
         <TableView fx:id="hoursWorkedTable" layoutX="14.0" layoutY="14.0" prefHeight="300.0" prefWidth="600.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
             <columns>
                 <TableColumn fx:id="employeeCol" prefWidth="130.0" resizable="false" text="Employee" />
+                <TableColumn fx:id="hoursWorkedCol" prefWidth="130.0" resizable="false" text="Total Hours" />
                 <TableColumn fx:id="mondayCol" prefWidth="130.0" resizable="false" text="Monday" />
                 <TableColumn fx:id="tuesdayCol" prefWidth="130.0" resizable="false" text="Tuesday" />
                 <TableColumn fx:id="wednesdayCol" prefWidth="130.0" resizable="false" text="Wednesday" />
@@ -20,7 +20,7 @@
         </TableView>
         <Label fx:id="weekLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="156.0" layoutY="14.0" prefHeight="30.0" prefWidth="285.0" text="Week of 00/00/0000 - 00/00/0000" textAlignment="CENTER" AnchorPane.leftAnchor="156.0" AnchorPane.rightAnchor="156.0" />
         <Button fx:id="doneButton" layoutX="14.0" layoutY="356.0" mnemonicParsing="false" onAction="#handleCloseButtonAction" prefHeight="30.0" prefWidth="59.0" text="Done" />
-        <Button fx:id="backWeekBtn" layoutX="387.0" layoutY="16.0" mnemonicParsing="false" onAction="#goToLastWeek" text="&lt;" />
-        <Button fx:id="nextWeekBtn" layoutX="629.0" layoutY="16.0" mnemonicParsing="false" onAction="#goToNextWeek" text="&gt;" />
+        <Button fx:id="backWeekBtn" layoutX="452.0" layoutY="17.0" mnemonicParsing="false" onAction="#goToLastWeek" text="&lt;" />
+        <Button fx:id="nextWeekBtn" layoutX="694.0" layoutY="17.0" mnemonicParsing="false" onAction="#goToNextWeek" text="&gt;" />
     </children>
 </AnchorPane>

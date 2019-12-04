@@ -60,69 +60,11 @@ public class HoursWorkedController
     @FXML
     TableColumn<Schedule, String> sundayCol;
 
-    @FXML
-    public void handleCloseButtonAction()
-    {
-        Stage stage = (Stage)this.doneButton.getScene().getWindow();
-        stage.close();
-    }
-
-    @FXML
-    public void goToLastWeek() throws ParseException, SQLException
-    {
-        for(int i = 0; i < 7; i++)
-        {
-            Calendar c = Calendar.getInstance();
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-            c.setTime(sdf.parse(week[i]));
-            c.add(Calendar.DAY_OF_MONTH, -7);
-            week[i] = sdf.format(c.getTime());
-            currentWeek.setText("Week of " + week[0] + " - " + week[6]);
-        }
-
-        hoursWorked.setText(getHoursWorked());
-    }
-
-    @FXML
-    public void goToNextWeek() throws ParseException, SQLException
-    {
-        for(int i = 0; i < 7; i++)
-        {
-            Calendar c = Calendar.getInstance();
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-            c.setTime(sdf.parse(week[i]));
-            c.add(Calendar.DAY_OF_MONTH, 7);
-            week[i] = sdf.format(c.getTime());
-            currentWeek.setText("Week of " + week[0] + " - " + week[6]);
-        }
-
-        hoursWorked.setText(getHoursWorked());
-    }
-
     public void onInit(int id) throws SQLException, ParseException
     {
         this.employeeID = id;
         this.getWeek();
-        this.hoursWorked.setText(this.getHoursWorked());
-    }
-
-    public String[] getWeek()
-    {
-        LocalDate mostRecentMonday = LocalDate.now(ZoneId.of("America/Montreal")).with(TemporalAdjusters.previous(DayOfWeek.MONDAY));
-        DateTimeFormatter mmddyyyy = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        LocalDate current = mostRecentMonday;
-
-        for(int i = 0; i < 7; i++)
-        {
-            if (i != 0)
-            {
-                current = current.plusDays(1L);
-            }
-            week[i] = current.format(mmddyyyy);
-        }
-
-        this.currentWeek.setText("Week of " + week[0] + " - " + week[6]);
-        return week;
+        this.getHoursWorked();
     }
 
     public String getHoursWorked() throws SQLException, ParseException
@@ -195,5 +137,62 @@ public class HoursWorkedController
         connection.close();
         statement.close();
         return hrsworked;
+    }
+    @FXML
+    public void handleCloseButtonAction()
+    {
+        Stage stage = (Stage)this.doneButton.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    public void goToLastWeek() throws ParseException, SQLException
+    {
+        for(int i = 0; i < 7; i++)
+        {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            c.setTime(sdf.parse(week[i]));
+            c.add(Calendar.DAY_OF_MONTH, -7);
+            week[i] = sdf.format(c.getTime());
+            currentWeek.setText("Week of " + week[0] + " - " + week[6]);
+        }
+
+        hoursWorked.setText(getHoursWorked());
+    }
+
+    @FXML
+    public void goToNextWeek() throws ParseException, SQLException
+    {
+        for(int i = 0; i < 7; i++)
+        {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            c.setTime(sdf.parse(week[i]));
+            c.add(Calendar.DAY_OF_MONTH, 7);
+            week[i] = sdf.format(c.getTime());
+            currentWeek.setText("Week of " + week[0] + " - " + week[6]);
+        }
+
+        hoursWorked.setText(getHoursWorked());
+    }
+
+    public String[] getWeek()
+    {
+        LocalDate mostRecentMonday = LocalDate.now(ZoneId.of("America/Montreal")).with(TemporalAdjusters.previous(DayOfWeek.MONDAY));
+        DateTimeFormatter mmddyyyy = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        LocalDate current = mostRecentMonday;
+
+        for(int i = 0; i < 7; i++)
+        {
+            if (i != 0)
+            {
+                current = current.plusDays(1L);
+            }
+            week[i] = current.format(mmddyyyy);
+        }
+
+        this.currentWeek.setText("Week of " + week[0] + " - " + week[6]);
+        return week;
     }
 }
