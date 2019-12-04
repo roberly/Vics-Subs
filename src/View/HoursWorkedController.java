@@ -25,14 +25,20 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
-public class HoursWorkedController {
+public class HoursWorkedController
+{
     private DBConnection database = new DBConnection();
     private Connection connection;
     private Statement statement;
     private ResultSet resultSet;
     private int employeeID;
+    String[] week = new String[7];
     @FXML
     Button doneButton;
+    @FXML
+    Button btnlastWeek;
+    @FXML
+    Button btnnextWeek;
     @FXML
     Label hoursWorked;
     @FXML
@@ -54,42 +60,79 @@ public class HoursWorkedController {
     @FXML
     TableColumn<Schedule, String> sundayCol;
 
-    public HoursWorkedController() {
-    }
-
     @FXML
-    public void handleCloseButtonAction() throws SQLException, ParseException {
+    public void handleCloseButtonAction()
+    {
         Stage stage = (Stage)this.doneButton.getScene().getWindow();
         stage.close();
     }
 
-    public void onInit(int id) throws SQLException, ParseException {
-        this.employeeID = id;
-        this.hoursWorked.setText(this.getHoursWorked(this.getWeek()));
+    @FXML
+    public void goToLastWeek() throws ParseException, SQLException
+    {
+        for(int i = 0; i < 7; i++)
+        {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            c.setTime(sdf.parse(week[i]));
+            c.add(Calendar.DAY_OF_MONTH, -7);
+            week[i] = sdf.format(c.getTime());
+            currentWeek.setText("Week of " + week[0] + " - " + week[6]);
+        }
+
+        hoursWorked.setText(getHoursWorked());
     }
 
-    public String[] getWeek() {
-        LocalDate mostRecentMonday = LocalDate.now( ZoneId.of( "America/Montreal" ) ).with( TemporalAdjusters.previous( DayOfWeek.MONDAY ) ) ;
-        String[] week = new String[7];
+    @FXML
+    public void goToNextWeek() throws ParseException, SQLException
+    {
+        for(int i = 0; i < 7; i++)
+        {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            c.setTime(sdf.parse(week[i]));
+            c.add(Calendar.DAY_OF_MONTH, 7);
+            week[i] = sdf.format(c.getTime());
+            currentWeek.setText("Week of " + week[0] + " - " + week[6]);
+        }
+
+        hoursWorked.setText(getHoursWorked());
+    }
+
+    public void onInit(int id) throws SQLException, ParseException
+    {
+        this.employeeID = id;
+        this.getWeek();
+        this.hoursWorked.setText(this.getHoursWorked());
+    }
+
+    public String[] getWeek()
+    {
+        LocalDate mostRecentMonday = LocalDate.now(ZoneId.of("America/Montreal")).with(TemporalAdjusters.previous(DayOfWeek.MONDAY));
         DateTimeFormatter mmddyyyy = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         LocalDate current = mostRecentMonday;
 
-        for(int i = 0; i < 7; ++i) {
-            if (i != 0) {
+        for(int i = 0; i < 7; i++)
+        {
+            if (i != 0)
+            {
                 current = current.plusDays(1L);
             }
-
             week[i] = current.format(mmddyyyy);
         }
 
-        this.currentWeek.setText(week[0] + " - " + week[6]);
+        this.currentWeek.setText("Week of " + week[0] + " - " + week[6]);
         return week;
     }
 
-    public String getHoursWorked(String[] week) throws SQLException, ParseException {
+    public String getHoursWorked() throws SQLException, ParseException
+    {
+        hoursWorkedTable.getItems().clear();
+
         DBConnection database = new DBConnection();
         Connection connection = database.getConnection();
         Statement statement = connection.createStatement();
+
         this.mondayCol.setCellValueFactory(new PropertyValueFactory("monday"));
         this.tuesdayCol.setCellValueFactory(new PropertyValueFactory("tuesday"));
         this.wednesdayCol.setCellValueFactory(new PropertyValueFactory("wednesday"));
@@ -97,6 +140,7 @@ public class HoursWorkedController {
         this.fridayCol.setCellValueFactory(new PropertyValueFactory("friday"));
         this.saturdayCol.setCellValueFactory(new PropertyValueFactory("saturday"));
         this.sundayCol.setCellValueFactory(new PropertyValueFactory("sunday"));
+
         ObservableList<Schedule> hoursWorkedData = FXCollections.observableArrayList();
         String sundayShift = "";
         String mondayShift = "";
@@ -105,6 +149,7 @@ public class HoursWorkedController {
         String thursdayShift = "";
         String fridayShift = "";
         String saturdayShift = "";
+
         DateFormat df = new SimpleDateFormat("hh:mm:ss aa");
         DateFormat hhmmss = new SimpleDateFormat("hh:mm aa");
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
