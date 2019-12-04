@@ -105,14 +105,17 @@ public class ScheduleController
                 String resultDate = resultSet.getString("ShiftDate");
                 String ShiftStartTime = resultSet.getString("ShiftStartTime");
                 String ShiftEndTime = resultSet.getString("ShiftEndTime");
+                String ShiftTime = "";
                 int startFirstColon = ShiftStartTime.indexOf(":");
                 int endFirstColon = ShiftEndTime.indexOf(":");
                 int startLength = ShiftStartTime.length();
                 int endLength = ShiftEndTime.length();
-
-                ShiftStartTime = ShiftStartTime.substring(0,startFirstColon+3) + ShiftStartTime.substring(startLength-3,startLength);
-                ShiftEndTime = ShiftEndTime.substring(0,endFirstColon+3) + ShiftEndTime.substring(endLength-3,endLength);
-
+                if(!ShiftStartTime.equals("REQUEST OFF"))
+                {
+                    ShiftStartTime = ShiftStartTime.substring(0,startFirstColon+3) + ShiftStartTime.substring(startLength-3,startLength);
+                    ShiftEndTime = ShiftEndTime.substring(0,endFirstColon+3) + ShiftEndTime.substring(endLength-3,endLength);
+                    ShiftTime = ShiftStartTime + " - " + ShiftEndTime;
+                }
                 if(resultDate.equals(week[0]))
                     mondayShift = ShiftStartTime + " - " + ShiftEndTime;
 
