@@ -16,8 +16,8 @@
       <TextField fx:id="FirstField" layoutX="229.0" layoutY="71.0" />
       <TextField fx:id="LastField" layoutX="229.0" layoutY="116.0" />
       <TextField fx:id="UserField" layoutX="229.0" layoutY="165.0" />
-      <TextField fx:id="PassField" layoutX="229.0" layoutY="207.0" />
-      <TextField fx:id="ConfirmField" layoutX="229.0" layoutY="248.0" />
+      <PasswordField fx:id="PassField" layoutX="229.0" layoutY="207.0" />
+      <PasswordField fx:id="ConfirmField" layoutX="229.0" layoutY="248.0" />
       <Label fx:id="Title" layoutX="89.0" layoutY="26.0" text="Enter only the information for which you want to edit">
          <font>
             <Font size="18.0" />

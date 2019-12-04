@@ -21,12 +21,16 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ModifyScheduleController
 {
@@ -37,6 +41,10 @@ public class ModifyScheduleController
 
     @FXML
     Button doneButton;
+    @FXML
+    Button backWeekBtn;
+    @FXML
+    Button nextWeekBtn;
     @FXML
     Label weekLabel;
     @FXML
@@ -69,6 +77,8 @@ public class ModifyScheduleController
 
     public void showSchedule() throws SQLException
     {
+        scheduleTable.getItems().clear();
+
         employeeCol.setCellValueFactory(new PropertyValueFactory<Schedule, String>("employee"));
         sundayCol.setCellValueFactory(new PropertyValueFactory<Schedule,String>("sunday"));
         mondayCol.setCellValueFactory(new PropertyValueFactory<Schedule,String>("monday"));
@@ -97,13 +107,31 @@ public class ModifyScheduleController
                     String val = column.getCellData(row).toString();
                     System.out.println("Selected Value, " + val + ", Column: " + col + ", Row: " + row);
 
-                    if(val.equals(""))
+                    if(col == 0)
                     {
                         try
                         {
-                            addShift(col, EmployeeIDs.get(row));
+                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will overwrite any shifts this employee has for the current week!", ButtonType.YES, ButtonType.CANCEL);
+                            alert.setHeaderText("Use Last Week's Shifts for this Employee?");
+                            alert.showAndWait();
+
+                            if (alert.getResult() == ButtonType.YES)
+                            {
+                                useLastWeekSchedule(EmployeeIDs.get(row));
+                            }
                         }
-                        catch (IOException e)
+                        catch (SQLException | ParseException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                    else if(val.equals(""))
+                    {
+                        try
+                        {
+                            addShift(col-1, EmployeeIDs.get(row));
+                        }
+                        catch (IOException | SQLException e)
                         {
                             e.printStackTrace();
                         }
@@ -112,47 +140,46 @@ public class ModifyScheduleController
                     {
                         try
                         {
-                            changeShift(val, col, EmployeeIDs.get(row));
+                            changeShift(col-1, EmployeeIDs.get(row));
                         }
-                        catch (IOException e)
+                        catch (IOException | SQLException e)
                         {
                             e.printStackTrace();
                         }
                     }
-                    //Do thing
-                    //If its empty, we will want to do an insert of a new shift
-                    //If it exists, we will want to do an update of the shift. Maybe find a way to bind the shift ID to
-                    //it? Probably not worth trying and I'll just select by shift date. This will all be handled in the
-                    //Shift edit controller obviously but it doesn't exist yet.
                 }
             }
         });
     }
 
-    private void addShift(int weekColumn, int employeeID) throws IOException
+    private void addShift(int weekColumn, int employeeID) throws IOException, SQLException
     {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddShift.fxml"));
         Parent root1 = (Parent) fxmlLoader.load();
         AddShiftController controller = fxmlLoader.getController();
-        controller.onInit(week[weekColumn], employeeID);
+        controller.onInit(week[weekColumn], employeeID, this);
         Stage stage = new Stage();
         stage.setTitle("Add New Shift");
         stage.setScene(new Scene(root1));
         stage.show();
     }
 
-    private void changeShift(String currentShift, int weekColumn, int employeeID) throws IOException
+    private void changeShift(int weekColumn, int employeeID) throws IOException, SQLException
     {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("EditShift.fxml"));
         Parent root1 = (Parent) fxmlLoader.load();
+        EditShiftController controller = fxmlLoader.getController();
+        controller.onInit(week[weekColumn], employeeID, this);
         Stage stage = new Stage();
-        stage.setTitle("Alter Shift");
+        stage.setTitle("Change Shift");
         stage.setScene(new Scene(root1));
         stage.show();
     }
 
     private ObservableList<Schedule> getDataFromScheduleAndAddToObservableList(){
         ObservableList<Schedule> scheduleData = FXCollections.observableArrayList();
+        EmployeeIDs.clear();
+        EmployeeNames.clear();
         try {
             String sundayShift = "";
             String mondayShift = "";
@@ -191,34 +218,41 @@ public class ModifyScheduleController
                     String resultDate = resultSet.getString("ShiftDate");
                     String ShiftStartTime = resultSet.getString("ShiftStartTime");
                     String ShiftEndTime = resultSet.getString("ShiftEndTime");
+                    String ShiftTime = "";
                     int startFirstColon = ShiftStartTime.indexOf(":");
                     int endFirstColon = ShiftEndTime.indexOf(":");
                     int startLength = ShiftStartTime.length();
                     int endLength = ShiftEndTime.length();
 
-                    ShiftStartTime = ShiftStartTime.substring(0, startFirstColon + 3) + ShiftStartTime.substring(startLength - 3, startLength);
-                    ShiftEndTime = ShiftEndTime.substring(0, endFirstColon + 3) + ShiftEndTime.substring(endLength - 3, endLength);
+                    if(!ShiftStartTime.equals("REQUEST OFF"))
+                    {
+                        ShiftStartTime = ShiftStartTime.substring(0, startFirstColon + 3) + ShiftStartTime.substring(startLength - 3, startLength);
+                        ShiftEndTime = ShiftEndTime.substring(0, endFirstColon + 3) + ShiftEndTime.substring(endLength - 3, endLength);
+                        ShiftTime = ShiftStartTime + " - " + ShiftEndTime;
+                    }
+                    else
+                        ShiftTime = ShiftStartTime;
 
                     if (resultDate.equals(week[0]))
-                        mondayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        mondayShift = ShiftTime;
 
                     else if (resultDate.equals(week[1]))
-                        tuesdayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        tuesdayShift = ShiftTime;
 
                     else if (resultDate.equals(week[2]))
-                        wednesdayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        wednesdayShift = ShiftTime;
 
                     else if (resultDate.equals(week[3]))
-                        thursdayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        thursdayShift = ShiftTime;
 
                     else if (resultDate.equals(week[4]))
-                        fridayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        fridayShift = ShiftTime;
 
                     else if (resultDate.equals(week[5]))
-                        saturdayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        saturdayShift = ShiftTime;
 
                     else if (resultDate.equals(week[6]))
-                        sundayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        sundayShift = ShiftTime;
                 }
                 scheduleData.add(new Schedule(employee, mondayShift, tuesdayShift, wednesdayShift, thursdayShift, fridayShift, saturdayShift, sundayShift));
             }
@@ -235,6 +269,11 @@ public class ModifyScheduleController
 
     public String[] getWeek()
     {
+        if(week[0] != null)
+        {
+            return week;
+        }
+
         LocalDate mostRecentMonday =
                 LocalDate.now(ZoneId.of("America/Montreal"))
                         .with(TemporalAdjusters.previous(DayOfWeek.MONDAY));
@@ -250,6 +289,74 @@ public class ModifyScheduleController
         }
         weekLabel.setText("Week of " + week[0] + " - " + week[6]);
         return week;
+    }
+
+    private void useLastWeekSchedule(int employeeID) throws ParseException, SQLException
+    {
+        for(int i = 0; i < 7; i++)
+        {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            c.setTime(sdf.parse(week[i]));
+            c.add(Calendar.DAY_OF_MONTH, -7);
+            String lastWeek = sdf.format(c.getTime());
+
+            DBConnection database = new DBConnection();
+            Connection connection = database.getConnection();
+            Statement statement = connection.createStatement();
+
+            resultSet = statement.executeQuery("SELECT ShiftStartTime, ShiftEndTime FROM Schedule WHERE Employee_ID = "
+                    + employeeID + " AND ShiftDate = '" + lastWeek + "';");
+            try
+            {
+                resultSet.next();
+
+                String startTime = resultSet.getString("ShiftStartTime");
+                String endTime = resultSet.getString("ShiftEndTime");
+
+                String str = "INSERT INTO Schedule (Employee_ID, ShiftDate, ShiftStartTime, ShiftEndTime) VALUES ("
+                        + employeeID + ", '" + week[i] + "', '" + startTime + "', '" + endTime + "');";
+
+                statement.executeUpdate(str);
+            }
+            catch (Exception e)
+            {
+                //We don't care, just catching errors when they are off
+            }
+        }
+        showSchedule();
+    }
+
+    @FXML
+    public void goToLastWeek() throws ParseException, SQLException
+    {
+        for(int i = 0; i < 7; i++)
+        {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            c.setTime(sdf.parse(week[i]));
+            c.add(Calendar.DAY_OF_MONTH, -7);
+            week[i] = sdf.format(c.getTime());
+            weekLabel.setText("Week of " + week[0] + " - " + week[6]);
+        }
+
+        showSchedule();
+    }
+
+    @FXML
+    public void goToNextWeek() throws ParseException, SQLException
+    {
+        for(int i = 0; i < 7; i++)
+        {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            c.setTime(sdf.parse(week[i]));
+            c.add(Calendar.DAY_OF_MONTH, 7);
+            week[i] = sdf.format(c.getTime());
+            weekLabel.setText("Week of " + week[0] + " - " + week[6]);
+        }
+
+        showSchedule();
     }
 
     @FXML

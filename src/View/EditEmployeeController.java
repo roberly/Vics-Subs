@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -38,11 +39,19 @@ public class EditEmployeeController
     private String firstname;
     private String lastname;
 
-    public void onInit(String x, String y)
-    {
+    public void onInit(String x, String y) throws SQLException {
         firstname = x;
         lastname = y;
+        if(!isNotEmployed())
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Edit User");
+            alert.setHeaderText("Valid name needed");
+            alert.setContentText("You are NOT employed!");
+            alert.showAndWait();
+        }
     }
+
     @FXML
     public void handleCloseButtonAction()
     {
@@ -123,7 +132,11 @@ public class EditEmployeeController
         {
 
 
-            Title.setText("This user is NOT employed! Please add as new user!");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Edit User");
+            alert.setHeaderText("Valid name needed");
+            alert.setContentText("You are NOT employed!");
+            alert.showAndWait();
             UserField.clear();
             PassField.clear();
             FirstField.clear();
@@ -136,11 +149,10 @@ public class EditEmployeeController
     @FXML
     public void bringEdited() throws IOException
     {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("EditedUser.fxml"));
-        Parent root1 = (Parent) fxmlLoader.load();
-        Stage stage = new Stage();
-        stage.setTitle("They have been Edited!");
-        stage.setScene(new Scene(root1));
-        stage.show();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Edit Employee");
+        alert.setHeaderText("Thank You!");
+        alert.setContentText("You have edited this employee");
+        alert.showAndWait();
     }
 }

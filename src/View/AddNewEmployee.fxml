@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.AddNewEmployeeController">
     <children>
         <Button fx:id="CancelButton" layoutX="203.0" layoutY="324.0" mnemonicParsing="false" onAction="#handleCloseButtonAction" text="Cancel" />
@@ -16,8 +17,8 @@
         <TextField fx:id="FirstField" layoutX="229.0" layoutY="71.0" />
         <TextField fx:id="LastField" layoutX="229.0" layoutY="116.0" />
         <TextField fx:id="UserField" layoutX="229.0" layoutY="165.0" />
-        <TextField fx:id="PassField" layoutX="229.0" layoutY="207.0" />
-        <TextField fx:id="ConfirmField" layoutX="229.0" layoutY="248.0" />
+        <PasswordField fx:id="PassField" layoutX="229.0" layoutY="207.0" />
+        <PasswordField fx:id="ConfirmField" layoutX="229.0" layoutY="248.0" />
         <Label fx:id="Title" layoutX="110.0" layoutY="29.0" text="Enter all the information for the new hire below!">
             <font>
                 <Font size="18.0" />
