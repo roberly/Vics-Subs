@@ -107,7 +107,25 @@ public class ModifyScheduleController
                     String val = column.getCellData(row).toString();
                     System.out.println("Selected Value, " + val + ", Column: " + col + ", Row: " + row);
 
-                    if(val.equals(""))
+                    if(col == 0)
+                    {
+                        try
+                        {
+                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will overwrite any shifts this employee has for the current week!", ButtonType.YES, ButtonType.CANCEL);
+                            alert.setHeaderText("Use Last Week's Shifts for this Employee?");
+                            alert.showAndWait();
+
+                            if (alert.getResult() == ButtonType.YES)
+                            {
+                                useLastWeekSchedule(EmployeeIDs.get(row));
+                            }
+                        }
+                        catch (SQLException | ParseException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                    else if(val.equals(""))
                     {
                         try
                         {
@@ -200,34 +218,41 @@ public class ModifyScheduleController
                     String resultDate = resultSet.getString("ShiftDate");
                     String ShiftStartTime = resultSet.getString("ShiftStartTime");
                     String ShiftEndTime = resultSet.getString("ShiftEndTime");
+                    String ShiftTime = "";
                     int startFirstColon = ShiftStartTime.indexOf(":");
                     int endFirstColon = ShiftEndTime.indexOf(":");
                     int startLength = ShiftStartTime.length();
                     int endLength = ShiftEndTime.length();
 
-                    ShiftStartTime = ShiftStartTime.substring(0, startFirstColon + 3) + ShiftStartTime.substring(startLength - 3, startLength);
-                    ShiftEndTime = ShiftEndTime.substring(0, endFirstColon + 3) + ShiftEndTime.substring(endLength - 3, endLength);
+                    if(!ShiftStartTime.equals("REQUEST OFF"))
+                    {
+                        ShiftStartTime = ShiftStartTime.substring(0, startFirstColon + 3) + ShiftStartTime.substring(startLength - 3, startLength);
+                        ShiftEndTime = ShiftEndTime.substring(0, endFirstColon + 3) + ShiftEndTime.substring(endLength - 3, endLength);
+                        ShiftTime = ShiftStartTime + " - " + ShiftEndTime;
+                    }
+                    else
+                        ShiftTime = ShiftStartTime;
 
                     if (resultDate.equals(week[0]))
-                        mondayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        mondayShift = ShiftTime;
 
                     else if (resultDate.equals(week[1]))
-                        tuesdayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        tuesdayShift = ShiftTime;
 
                     else if (resultDate.equals(week[2]))
-                        wednesdayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        wednesdayShift = ShiftTime;
 
                     else if (resultDate.equals(week[3]))
-                        thursdayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        thursdayShift = ShiftTime;
 
                     else if (resultDate.equals(week[4]))
-                        fridayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        fridayShift = ShiftTime;
 
                     else if (resultDate.equals(week[5]))
-                        saturdayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        saturdayShift = ShiftTime;
 
                     else if (resultDate.equals(week[6]))
-                        sundayShift = ShiftStartTime + " - " + ShiftEndTime;
+                        sundayShift = ShiftTime;
                 }
                 scheduleData.add(new Schedule(employee, mondayShift, tuesdayShift, wednesdayShift, thursdayShift, fridayShift, saturdayShift, sundayShift));
             }
@@ -264,6 +289,42 @@ public class ModifyScheduleController
         }
         weekLabel.setText("Week of " + week[0] + " - " + week[6]);
         return week;
+    }
+
+    private void useLastWeekSchedule(int employeeID) throws ParseException, SQLException
+    {
+        for(int i = 0; i < 7; i++)
+        {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            c.setTime(sdf.parse(week[i]));
+            c.add(Calendar.DAY_OF_MONTH, -7);
+            String lastWeek = sdf.format(c.getTime());
+
+            DBConnection database = new DBConnection();
+            Connection connection = database.getConnection();
+            Statement statement = connection.createStatement();
+
+            resultSet = statement.executeQuery("SELECT ShiftStartTime, ShiftEndTime FROM Schedule WHERE Employee_ID = "
+                    + employeeID + " AND ShiftDate = '" + lastWeek + "';");
+            try
+            {
+                resultSet.next();
+
+                String startTime = resultSet.getString("ShiftStartTime");
+                String endTime = resultSet.getString("ShiftEndTime");
+
+                String str = "INSERT INTO Schedule (Employee_ID, ShiftDate, ShiftStartTime, ShiftEndTime) VALUES ("
+                        + employeeID + ", '" + week[i] + "', '" + startTime + "', '" + endTime + "');";
+
+                statement.executeUpdate(str);
+            }
+            catch (Exception e)
+            {
+                //We don't care, just catching errors when they are off
+            }
+        }
+        showSchedule();
     }
 
     @FXML

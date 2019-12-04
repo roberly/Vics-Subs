@@ -6,10 +6,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -17,12 +14,19 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class ViewRequestsOffController {
 
     public void initialize() throws SQLException {
         fillTable();
-        fillOutSelectedData();
+        try {
+            fillOutSelectedData();
+        } catch (Exception e) {
+
+        }
     }
 
     @FXML
@@ -69,11 +73,11 @@ public class ViewRequestsOffController {
             TableColumn column = new TableColumn(resultSet.getMetaData().getColumnName(i+1));
             column.setCellValueFactory
                     (new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
-                    return new SimpleStringProperty(param.getValue().get(j).toString());
-                }
-            });
+                        @Override
+                        public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
+                            return new SimpleStringProperty(param.getValue().get(j).toString());
+                        }
+                    });
 
             requestsOffTableView.getColumns().addAll(column);
         }
@@ -88,7 +92,7 @@ public class ViewRequestsOffController {
         requestsOffTableView.setItems(requestOffInfo);
     }
 
-    public void fillOutSelectedData(){
+    public void fillOutSelectedData() {
         requestsOffTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
         {
             Object selectedItems = requestsOffTableView.getSelectionModel().getSelectedItems().get(0);
@@ -97,7 +101,7 @@ public class ViewRequestsOffController {
             String startDate = selectedItems.toString().split(",")[1].substring(1);
             startDateTextField.setText(startDate);
             String endDate = selectedItems.toString().split(",")[2].substring(1);
-            endDateTextField.setText(endDate.substring(0,endDate.length()-1));
+            endDateTextField.setText(endDate.substring(0, endDate.length() - 1));
             try {
                 String employeeName = getNameFromId(Integer.valueOf(employeeId));
                 employeeTextField.setText(employeeName);
@@ -123,18 +127,70 @@ public class ViewRequestsOffController {
                 + endDateTextField.getText() + "';";
         int resultSet = statement.executeUpdate(deleteRow);
         removeRowFromTable();
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Request Denied");
+        alert.setHeaderText("Request Denied");
+        alert.showAndWait();
+
+        employeeTextField.setText("");
+        endDateTextField.setText("");
+        startDateTextField.setText("");
+        employeeIdTextField.setText("");
     }
 
     @FXML
-    public void approve() throws SQLException {
+    public void approve() throws SQLException, ParseException {
         DBConnection database = new DBConnection();
         Connection connection = database.getConnection();
         Statement statement = connection.createStatement();
+        String employeeID = employeeIdTextField.getText();
+        String startDate = startDateTextField.getText();
+        String endDate = endDateTextField.getText();
 
-        String updateeRow = "UPDATE RequestedTimeOff SET Approval = '1' WHERE Employee_ID = '" + employeeIdTextField.getText()
-                + "' AND StartDate = '" + startDateTextField.getText() + "' AND EndDate = '" + endDateTextField.getText() + "';";
-        int resultSet = statement.executeUpdate(updateeRow);
+        String updateRow = "UPDATE RequestedTimeOff SET Approval = '1' WHERE Employee_ID = '" + employeeID
+                + "' AND StartDate = '" + startDate + "' AND EndDate = '" + endDate + "';";
+        statement.executeUpdate(updateRow);
 
+        String firstDayInsert = "INSERT INTO Schedule (Employee_ID, ShiftDate, ShiftStartTime, ShiftEndTime) VALUES ("
+                + employeeID + ", '" + startDate + "', 'REQUEST OFF', '')";
+        System.out.println(firstDayInsert);
+        statement.executeUpdate(firstDayInsert);
+
+        if(!startDate.equals(endDate))
+        {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            c.setTime(sdf.parse(startDate));
+            while(!sdf.format(c.getTime()).equals(endDate))
+            {
+                c.add(Calendar.DAY_OF_MONTH, 1);
+                String date = sdf.format(c.getTime());
+
+                String nextDayInsert = "INSERT INTO Schedule (Employee_ID, ShiftDate, ShiftStartTime, ShiftEndTime) VALUES ("
+                        + employeeID + ", '" + date + "', 'REQUEST OFF', '')";
+
+                System.out.println(nextDayInsert);
+                statement.executeUpdate(nextDayInsert);
+            }
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Request Approved");
+        alert.setHeaderText("Request Approved");
+        alert.showAndWait();
+
+        String deleteRow = "DELETE FROM RequestedTimeOff WHERE Employee_ID = '" + employeeIdTextField.getText()
+                + "' AND StartDate = '" + startDateTextField.getText() + "' AND EndDate = '"
+                + endDateTextField.getText() + "';";
+        statement.executeUpdate(deleteRow);
+
+        removeRowFromTable();
+
+        employeeTextField.setText("");
+        endDateTextField.setText("");
+        startDateTextField.setText("");
+        employeeIdTextField.setText("");
     }
 
     private String getNameFromId(int id) throws SQLException {
