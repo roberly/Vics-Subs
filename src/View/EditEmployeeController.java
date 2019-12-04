@@ -51,6 +51,7 @@ public class EditEmployeeController
             alert.showAndWait();
         }
     }
+
     @FXML
     public void handleCloseButtonAction()
     {
