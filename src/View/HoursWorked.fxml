@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="383.0" prefWidth="1015.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.HoursWorkedController">
+<AnchorPane prefHeight="383.0" prefWidth="1015.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.HoursWorkedController">
     <children>
         <TableView fx:id="hoursWorkedTable" editable="true" fixedCellSize="0.0" layoutX="14.0" layoutY="14.0" prefHeight="260.0" prefWidth="600.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
             <columns>
@@ -23,7 +22,7 @@
         <Label fx:id="currentWeek" alignment="CENTER" contentDisplay="CENTER" layoutX="420.0" layoutY="14.0" prefHeight="30.0" prefWidth="1015.0" text="Week of 00/00/0000 - 00/00/0000" AnchorPane.leftAnchor="0.0" />
         <Label layoutX="335.0" layoutY="344.0" prefHeight="30.0" prefWidth="201.0" text="Total Hours Worked This Week:" />
         <Label fx:id="hoursWorked" layoutX="536.0" layoutY="344.0" prefHeight="30.0" prefWidth="191.0" text="9 hours and 35 minutes" />
-        <Button fx:id="doneButton" layoutX="867.0" layoutY="347.0" mnemonicParsing="false" onAction="#handleCloseButtonAction" text="Done" />
+        <Button fx:id="doneButton" layoutX="956.0" layoutY="347.0" mnemonicParsing="false" onAction="#handleCloseButtonAction" text="Done" />
       <Button fx:id="btnlastWeek" layoutX="381.0" layoutY="17.0" mnemonicParsing="false" onAction="#goToLastWeek" text="&lt;" />
       <Button fx:id="btnnextWeek" layoutX="606.0" layoutY="17.0" mnemonicParsing="false" onAction="#goToNextWeek" text="&gt;" />
     </children>
