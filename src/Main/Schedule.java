@@ -13,6 +13,7 @@ public class Schedule
     private final StringProperty friday;
     private final StringProperty saturday;
     private final StringProperty employee;
+    private final StringProperty hoursWorked;
 
     public Schedule(String monday, String tuesday, String wednesday, String thursday, String friday, String saturday, String sunday)
     {
@@ -24,6 +25,7 @@ public class Schedule
         this.friday = new SimpleStringProperty(friday);
         this.saturday = new SimpleStringProperty(saturday);
         this.employee = null;
+        this.hoursWorked = null;
     }
 
     //For admin schedule that includes name
@@ -37,6 +39,21 @@ public class Schedule
         this.friday = new SimpleStringProperty(friday);
         this.saturday = new SimpleStringProperty(saturday);
         this.employee = new SimpleStringProperty(employeeName);
+        this.hoursWorked = null;
+    }
+
+    //For admin view hours worked
+    public Schedule(String employeeName, String hoursWorked, String monday, String tuesday, String wednesday, String thursday, String friday, String saturday, String sunday)
+    {
+        this.sunday = new SimpleStringProperty(sunday);
+        this.monday = new SimpleStringProperty(monday);
+        this.tuesday = new SimpleStringProperty(tuesday);
+        this.wednesday = new SimpleStringProperty(wednesday);
+        this.thursday = new SimpleStringProperty(thursday);
+        this.friday = new SimpleStringProperty(friday);
+        this.saturday = new SimpleStringProperty(saturday);
+        this.employee = new SimpleStringProperty(employeeName);
+        this.hoursWorked = new SimpleStringProperty(hoursWorked);
     }
 
     public String getSunday() {
@@ -133,6 +150,18 @@ public class Schedule
 
     public void setEmployee(String employee) {
         this.employee.set(employee);
+    }
+
+    public String getHoursWorked() {
+        return hoursWorked.get();
+    }
+
+    public StringProperty hoursWorkedProperty() {
+        return hoursWorked;
+    }
+
+    public void setHoursWorked(String hoursWorked) {
+        this.hoursWorked.set(hoursWorked);
     }
 
 }

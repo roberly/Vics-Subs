@@ -5,6 +5,7 @@ import Main.Employee;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -56,9 +57,10 @@ public class ClockInController
         }
         else
         {
-
-            successText.setText(" ");
-            timeLabel.setText("You are already clocked in");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Already Clocked In");
+            alert.setHeaderText("You have already clocked in at");
+            alert.showAndWait();
         }
     }
 
