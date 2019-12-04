@@ -60,7 +60,6 @@ public class EditEmployeeController
     }
     private boolean isNotEmployed() throws SQLException
     {
-
         boolean employed = false;
         DBConnection database = new DBConnection();
         Connection connection = database.getConnection();
@@ -119,19 +118,17 @@ public class EditEmployeeController
                 PassField.clear();
                 ConfirmField.clear();
             }
-            else{
+            else
+                {
                 String str = "UPDATE Employee " + "SET FirstName = '"+Firstname+ "', Lastname = '"+Lastname+"', Password = '"+password+"', Username = '"+ username +"' WHERE FirstName = '"+firstname+"'";
                 System.out.println(str);
                 statement.executeUpdate(str);
                 Stage stage = (Stage) UpdateButton.getScene().getWindow();
                 stage.close();}
                 bringEdited();
-
         }
         else
         {
-
-
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Edit User");
             alert.setHeaderText("Valid name needed");
@@ -142,7 +139,6 @@ public class EditEmployeeController
             FirstField.clear();
             LastField.clear();
             ConfirmField.clear();
-
         }
 
     }
