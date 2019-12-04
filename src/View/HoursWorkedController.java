@@ -54,9 +54,6 @@ public class HoursWorkedController {
     @FXML
     TableColumn<Schedule, String> sundayCol;
 
-    public HoursWorkedController() {
-    }
-
     @FXML
     public void handleCloseButtonAction() throws SQLException, ParseException {
         Stage stage = (Stage)this.doneButton.getScene().getWindow();
@@ -65,7 +62,7 @@ public class HoursWorkedController {
 
     public void onInit(int id) throws SQLException, ParseException {
         this.employeeID = id;
-        this.hoursWorked.setText(this.getHoursWorked(this.getWeek()));
+        this.getHoursWorked(this.getWeek());
     }
 
     public String[] getWeek() {
@@ -86,7 +83,7 @@ public class HoursWorkedController {
         return week;
     }
 
-    public String getHoursWorked(String[] week) throws SQLException, ParseException {
+    public void getHoursWorked(String[] week) throws SQLException, ParseException {
         DBConnection database = new DBConnection();
         Connection connection = database.getConnection();
         Statement statement = connection.createStatement();
@@ -149,6 +146,6 @@ public class HoursWorkedController {
         String hrsworked = hours + " hours and " + mins + " minutes";
         connection.close();
         statement.close();
-        return hrsworked;
+        this.hoursWorked.setText(hrsworked);
     }
 }
