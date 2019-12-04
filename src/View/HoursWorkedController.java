@@ -9,8 +9,11 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -66,7 +69,7 @@ public class HoursWorkedController {
     }
 
     public String[] getWeek() {
-        LocalDate mostRecentMonday = LocalDate.of(2019, 11, 11);
+        LocalDate mostRecentMonday = LocalDate.now( ZoneId.of( "America/Montreal" ) ).with( TemporalAdjusters.previous( DayOfWeek.MONDAY ) ) ;
         String[] week = new String[7];
         DateTimeFormatter mmddyyyy = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         LocalDate current = mostRecentMonday;
@@ -103,8 +106,8 @@ public class HoursWorkedController {
         String fridayShift = "";
         String saturdayShift = "";
         DateFormat df = new SimpleDateFormat("hh:mm:ss aa");
-        DateFormat hhmmss = new SimpleDateFormat("hh:mm:ss");
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+        DateFormat hhmmss = new SimpleDateFormat("hh:mm aa");
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
         long hoursWorked = 0L;
 
         for(int i = 0; i < 7; ++i) {
