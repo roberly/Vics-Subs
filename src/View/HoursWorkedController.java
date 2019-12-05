@@ -64,7 +64,7 @@ public class HoursWorkedController
     {
         this.employeeID = id;
         this.getWeek();
-        this.getHoursWorked();
+        hoursWorked.setText(getHoursWorked());
     }
 
     public String getHoursWorked() throws SQLException, ParseException

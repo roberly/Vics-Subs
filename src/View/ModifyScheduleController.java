@@ -366,3 +366,4 @@ public class ModifyScheduleController
         stage.close();
     }
 }
+
