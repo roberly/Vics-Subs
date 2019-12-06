@@ -40,10 +40,6 @@ public class EmployeeWelcomeController
         Parent root1 = (Parent) fxmlLoader.load();
         ClockInController controller = fxmlLoader.getController();
         controller.onInit(employee.getId());
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root1, 500, 200));
-        stage.setTitle("Clock In");
-        stage.show();
     }
 
     /**
@@ -55,10 +51,6 @@ public class EmployeeWelcomeController
         Parent root1 = (Parent) fxmlLoader.load();
         ClockOutController controller = fxmlLoader.getController();
         controller.onInit(employee.getId());
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root1, 500, 200));
-        stage.setTitle("Clock Out");
-        stage.show();
     }
 
     /**

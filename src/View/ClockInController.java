@@ -53,13 +53,16 @@ public class ClockInController
 
             String str = "INSERT INTO TimePunches ( Employee_ID, ClockInTime, CurrentDate) Values (" + employeeID + ", '" + currentTime + "', '" + currentDate + "')";
             statement.executeUpdate(str);
-            timeLabel.setText(currentTime);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Welcome to your shift!");
+            alert.setHeaderText("You have clocked in at " + currentTime + ".");
+            alert.showAndWait();
         }
         else
         {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Already Clocked In");
-            alert.setHeaderText("You have already clocked in at");
+            alert.setHeaderText("You have already clocked in");
             alert.showAndWait();
         }
     }

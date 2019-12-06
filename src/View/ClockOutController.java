@@ -2,6 +2,7 @@ package View;
 
 import Database.DBConnection;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -66,19 +67,25 @@ public class ClockOutController {
 
         if(!isClockedIn())
         {
-            successText.setText(" ");
-            timeLabel.setText("You have not clocked in today");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("You have not clocked in");
+            alert.setHeaderText("You have not clocked in today. Please go clock in and then try again.");
+            alert.showAndWait();
         }
-        else if(isClockedOut())
-        {
-            successText.setText(" ");
-            timeLabel.setText("You have already clocked out \n                for the day");
+        else if(isClockedOut()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("You have already clocked out");
+            alert.setHeaderText("You have already been clocked out for the day.");
+            alert.showAndWait();
         }
         else
         {
             String str = "update TimePunches set ClockOutTime = '" + time + "' where Employee_ID =" + employeeID + " and CurrentDate = '" + date + "'";
             statement.executeUpdate(str);
-            timeLabel.setText(time);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Have a nice day!");
+            alert.setHeaderText("You have clocked out at " + time + ".");
+            alert.showAndWait();
         }
 
     }

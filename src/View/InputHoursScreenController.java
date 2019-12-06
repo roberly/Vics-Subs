@@ -139,7 +139,7 @@ public class InputHoursScreenController
             statement.executeUpdate(deleteHours);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Hours deleted successfully");
-            alert.setHeaderText("You have deleted hours for " + UsernameField.getText() + "successfully");
+            alert.setHeaderText("You have deleted hours for " + UsernameField.getText() + " successfully");
             alert.showAndWait();
         }
         else if(!doTheHoursExist)
